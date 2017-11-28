@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">TeamRenaissance</string>
+    <string name="home">Accueil</string>
+    <string name="borrow">Emprunter</string>
+    <string name="myloans">Mes Prêts</string>
+    <string name="profil">Profil</string>
+</resources>
