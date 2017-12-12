@@ -4,4 +4,10 @@
     <string name="borrow">Emprunter</string>
     <string name="myloans">Mes Prêts</string>
     <string name="profil">Profil</string>
+    <string name="title_activity_login">Sign in</string>
+
+    <!-- Login -->
+    <string name="loginPlaceholder">Login</string>
+    <string name="pwPlaceholder">Password</string>
+    <string name="signInButton">Sign in</string>
 </resources>

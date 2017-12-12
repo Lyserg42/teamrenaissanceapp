@@ -1,21 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<android.widget.LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="fr.teamrenaissance.julien.teamrenaissance.Accueil">
+    tools:context="fr.teamrenaissance.julien.teamrenaissance.Accueil"
+    android:orientation="vertical">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/my_toolbar"
-        android:layout_width="368dp"
-        android:layout_height="56dp"    
-        android:background="?attr/colorPrimary"
-        android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        tools:layout_editor_absoluteY="0dp"
-        tools:layout_editor_absoluteX="8dp" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hello world"/>
 
-</android.support.constraint.ConstraintLayout>
+    <!--
+        <android.support.v7.widget.Toolbar
+
+            android:layout_height="0dp"
+            android:layout_width="0dp"
+            android:background="@color/colomary">
+
+
+           <android.support.design.widget.TabItem
+                android:text="@string/activity_profil"/>
+
+            <android.support.design.widget.TabItem
+                android:text="@string/borrow"/>
+
+            <android.support.design.widget.TabItem
+                android:text="@string/myloans"/>
+
+            <android.support.design.widget.TabItem
+                android:text="@string/profil"/>
+
+    </android.support.v7.widget.Toolbar> -->
+
+
+</android.widget.LinearLayout>
