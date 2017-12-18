@@ -1,33 +1,4 @@
-<!--
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <TextView
-        android:id="@+id/profilLogin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="L"/>
-    <TextView
-        android:id="@+id/profilFirstName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Lijuan"/>
-    <TextView
-        android:id="@+id/profilLastName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="JIN"/>
-    <TextView
-        android:id="@+id/profilEmail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="lijuan.jin@etu.upmc.fr"/>
-
-
-</LinearLayout>-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -38,9 +9,9 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:weightSum="2"
     android:orientation="vertical" >
-<!--
-    tools:context="fr.teamrenaissance.julien.teamrenaissance.Profil"
--->
+    <!--
+        tools:context="fr.teamrenaissance.julien.teamrenaissance.Profil"
+    -->
 
 
     <RelativeLayout

@@ -7,16 +7,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class Profil extends Fragment {
+/**
+ * Created by zhouwei on 16/12/23.
+ */
+
+public class Mesprets extends Fragment {
 
     public static Fragment newInstance(){
-        Profil fragment = new Profil();
+        Mesprets fragment = new Mesprets();
         return fragment;
     }
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.profil,null);
+        View view = inflater.inflate(R.layout.mesprets,null);
         return view;
     }
 

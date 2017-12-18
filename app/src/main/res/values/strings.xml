@@ -10,4 +10,27 @@
     <string name="loginPlaceholder">Login</string>
     <string name="pwPlaceholder">Password</string>
     <string name="signInButton">Sign in</string>
+    <!-- Sign up -->
+    <string name="pseudoPlaceholder">Pseudo</string>
+    <string name="lastNamePlaceholder">Nom</string>
+    <string name="firstNamePlaceholder">Prénom</string>
+    <string name="emailPlaceholder">E-mail</string>
+    <string name="passwordPlaceholder">Mot de passe</string>
+    <string name="confirmPlaceholder">Confirmer</string>
+    <string name="signUpButton">S\'inscrire</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password (optional)</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_invalid_confirmPassword">The password and it\'s confirm are not the same</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+    <string name="title_activity_sing_up">Sign up</string>
 </resources>
