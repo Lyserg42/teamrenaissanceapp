@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class Profil extends Fragment {
+public class Profil extends Fragment{
 
     public static Fragment newInstance(){
         Profil fragment = new Profil();
