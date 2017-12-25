@@ -21,6 +21,9 @@ public class MyApplication extends Application{
     private String city;
     private String zipCode;
 
+    public MyApplication() {
+    }
+
     public MyApplication(Integer userID, String name, String firstname, String username, String email, String password, String address, String avatar, String dciNumber, String phoneNumber, String facebook, String twitter, String city, String zipCode) {
         this.userID = userID;
         this.name = name;

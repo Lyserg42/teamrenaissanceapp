@@ -1,21 +1,150 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:orientation="vertical"
-tools:context="fr.teamrenaissance.julien.teamrenaissance.Login">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:lynn="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="fr.teamrenaissance.julien.teamrenaissance.Login">
 
+    <ProgressBar
+        android:id="@+id/signup_progress"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone" />
 
-<fr.teamrenaissance.julien.teamrenaissance.utils.CircleImageview
-    android:id="@+id/mycircle"
-    android:layout_width="180dp"
-    android:layout_height="180dp"
-    android:background="@color/textColorPrimary"
-    android:src="@drawable/lyserg42"
-    app:backgroundHeadColor="@color/colorAccent"
-    app:circleBorderHeadWidth="5dp"
-    app:ringHeadColor="@color/colorAccent" />
-</LinearLayout>
+    <ScrollView
+        android:id="@+id/profil_form"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
+        <RelativeLayout
+            android:id="@+id/profil2_form"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <fr.teamrenaissance.julien.teamrenaissance.utils.CircleImageView
+                android:layout_marginTop="5dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_centerHorizontal="true"
+                lynn:radius="50dp"
+                android:id="@+id/avatar"/>
+
+            <TextView
+                android:id="@+id/pseudo"
+                android:layout_below="@+id/avatar"
+                android:layout_centerHorizontal="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="25dp"
+                android:textStyle="bold"/>
+            <TextView
+                android:id="@+id/name"
+                android:layout_below="@+id/pseudo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/user"
+                android:drawablePadding="12dp"
+                android:paddingTop="9dp"
+                android:paddingBottom="12dp"
+                android:textSize="16dp" />
+            <TextView
+                android:id="@+id/phone"
+                android:layout_below="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/phone"
+                android:drawablePadding="12dp"
+                android:paddingBottom="9dp"
+                android:textSize="16dp" />
+
+            <TextView
+                android:id="@+id/dci"
+                android:layout_below="@+id/phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/dci"
+                android:drawablePadding="12dp"
+                android:paddingBottom="9dp"
+                android:textSize="16dp" />
+
+            <TextView
+                android:id="@+id/home"
+                android:layout_below="@+id/dci"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/home"
+                android:drawablePadding="12dp"
+                android:paddingBottom="9dp"
+                android:textSize="16dp" />
+
+            <TextView
+                android:id="@+id/email"
+                android:layout_below="@+id/home"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/email"
+                android:drawablePadding="12dp"
+                android:paddingBottom="9dp"
+                android:textSize="16dp" />
+
+            <ImageView
+                android:id="@+id/fb"
+                android:layout_below="@+id/email"
+                android:src="@drawable/facebook"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="9dp"/>
+
+            <ImageView
+                android:id="@+id/tw"
+                android:layout_below="@+id/email"
+                android:layout_toRightOf="@+id/fb"
+                android:src="@drawable/twitter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="9dp"/>
+
+            <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/map"
+                android:layout_below="@id/fb"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="500dp"/>
+
+        </RelativeLayout>
+    </ScrollView>
+</RelativeLayout>
+
+<!-- Remarques:
+ Deja fait:
+ 1, RelativeLayout, plutot pour Imageview twitter qui peut etre a droite de ImageView facebook;
+
+ 2, View "avatar", appeler directement la class CircleImageView avec radius="50dp" pour afficher une image en cercle,
+    probleme rencontre(logcat debug):  I/Choreographer: Skipped 40 frames!  The application may be doing too much work on its main thread.
+    solution: https://stackoverflow.com/questions/11266535/meaning-of-choreographer-messages-in-logcat
+              https://vaibhavtolia.wordpress.com/2013/10/03/79/
+
+ 3, View "fragment", pour afficher google maps, il faut cette activity qui extends Fragment implements OnMapReadyCallback; Et
+    a, demander 1e api key(pour l'application peut etre accessible au google service) et afficher le maps
+       https://developers.google.com/maps/documentation/android-api/start
+    b, demander 2e key pour appeler le service geocoder qui rendre la longitude et la latitude par une address
+       https://stackoverflow.com/questions/15711499/get-latitude-and-longitude-with-geocoder-and-android-google-maps-api-v2
+    problemes rencontres(logcat debug):
+        a, W/DynamiteModule: Local module descriptor class for com.google.android.gms.googlecertificates not found.
+        b, W/zygote64: Skipping duplicate class check due to unrecognized classloader
+    solution: ???
+
+ Pas encore fait:
+ 1, ProgressBar
+
+-->
