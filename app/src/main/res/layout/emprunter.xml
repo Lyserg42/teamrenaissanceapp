@@ -1,15 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-android:orientation="vertical"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:gravity="center"
-    >
-<TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="First Page"
-    android:textColor="@color/colorAccent"
-    android:textSize="20sp"
-    />
-</LinearLayout>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    tools:context="fr.teamrenaissance.julien.teamrenaissance.Emprunter">
+
+    <RelativeLayout
+        android:id="@+id/emprunter_form"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="15dp">
+        </Spinner>
+
+        <TextView
+            android:id="@+id/qty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/spinner"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
+            android:text="Qty: "
+            android:textSize="15sp"/>
+
+        <EditText
+            android:id="@+id/qty_number"
+            android:layout_width="50dp"
+            android:layout_height="40dp"
+            android:layout_toRightOf="@+id/qty"
+            android:layout_below="@id/spinner"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/edittext_selector"
+            android:inputType="number"/>
+
+        <TextView
+            android:id="@+id/carte"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/qty_number"
+            android:layout_below="@id/spinner"
+            android:text="Carte: "
+            android:textSize="15sp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"/>
+
+        <EditText
+            android:id="@+id/cartes"
+            android:layout_width="250dp"
+            android:layout_height="40dp"
+            android:layout_toRightOf="@+id/carte"
+            android:layout_below="@id/spinner"
+            android:background="@drawable/edittext_selector"
+            android:layout_marginTop="10dp"
+            android:paddingLeft="10dp"/>
+
+        <EditText
+            android:id="@+id/textArea"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="top|left"
+            android:layout_below="@id/qty_number"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:inputType="textMultiLine"
+            android:overScrollMode="always"
+            android:scrollbarStyle="insideInset"
+            android:scrollbars="vertical"
+            android:lines="10"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:scrollHorizontally="false"
+            android:background="@drawable/edittext_selector" />
+
+        <Button
+            android:id="@+id/add"
+            style="?android:textAppearanceSmall"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_below="@+id/textArea"
+            android:layout_marginLeft="15dp"
+            android:text="Ajouter Carte"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/valide"
+            style="?android:textAppearanceSmall"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_below="@+id/textArea"
+            android:layout_toRightOf="@+id/add"
+            android:layout_marginLeft="15dp"
+            android:text="Valider demande"
+            android:textStyle="bold" />
+
+        </RelativeLayout>
+</RelativeLayout>
+
+<!-- Remarques:
+1, pour textarea:
+    https://learnpainless.com/android/how-to-create-textarea-in-android
+2, pour "border" des EditText
+    android:background="@drawable/edittext_selector" qui appeler des definitions dans le package drawable:
+    edittext_focus.xml
+    edittext_normal.xml
+    edittext_selector.xml
+
+
+-->

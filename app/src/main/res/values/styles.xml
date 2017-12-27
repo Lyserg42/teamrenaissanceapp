@@ -9,4 +9,10 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <!-- Emprunter spinner-->
+    <style name="SpinnerStyle">
+        <item name="colorAccent">#888888</item>
+        <item name="colorControlNormal">#dd000000</item>
+    </style>
+
 </resources>
