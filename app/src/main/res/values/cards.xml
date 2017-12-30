@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="cards">
+        <item>Abattoir Ghoul</item>
+        <item>Abbey Gargoyles</item>
+        <item>Adorned Pouncer</item>
+        <item>Advance Stitchwing</item>
+        <item>Anurid Scavenger</item>
+
+        <item>Black Lotus</item>
+        <item>Blood Crypt</item>
+        <item>Brain in a Har</item>
+
+        <item>Chandra, Torch of Defiance</item>
+        <item>Charging Monstrosaur</item>
+        <item>Condemn</item>
+
+        <item>Darkblast</item>
+
+        <item>Elesh Norn, Grand Cenobite</item>
+        <item>Ensnaring Bridge</item>
+        <item>Esperzoa</item>
+        <item>Essence Extraction</item>
+
+        <item>Falkenrath Gorger</item>
+        <item>Farseek</item>
+
+        <item>Glistener Elf</item>
+        <item>Grizzly Bears</item>
+
+        <item>Hallowed Foutain</item>
+        <item>Hardened Scales</item>
+
+        <item>Inquisition of Kozilek</item>
+        <item>Isamaru, Hound of Konda</item>
+        <item>Ishkanah, Grafwidow</item>
+
+        <item>Kari Zev, Skyship Raider</item>
+        <item>Karplusan Forest</item>
+
+        <item>Lava Spike</item>
+        <item>Lightning Bolt</item>
+        <item>Liliana of the Veil</item>
+        <item>Llanowar Elf</item>
+
+        <item>Magmatic Chasm</item>
+        <item>Monastery Swiftspear</item>
+
+        <item>Night of Souls\' Betrayal</item>
+        <item>Nissa, Vastwood Seer</item>
+
+        <item>Oracle of Mul Daya</item>
+        <item>Orzhov Charm</item>
+
+        <item>Paradoxical Outcome</item>
+        <item>Pestilence</item>
+
+        <item>Quicken</item>
+
+        <item>Rapid Hybridization</item>
+        <item>Read the Bones</item>
+        <item>Reparations</item>
+        <item>Restoration Angel</item>
+
+        <item>Search for Azcanta</item>
+        <item>Search for Tomorrow</item>
+        <item>Smokestack</item>
+        <item>Smother</item>
+
+        <item>Tarmogoyf</item>
+        <item>Terminate</item>
+        <item>Thoughtseize</item>
+
+        <item>Unknown Shores</item>
+        <item>Urborg, Tomb of Yawgmoth</item>
+
+        <item>Vampire Nighthawk</item>
+        <item>Vizzerdrix</item>
+
+        <item>Wall of Omens</item>
+        <item>Wrath of God</item>
+
+        <item>Xiahou Dun, the One-Eyed</item>
+
+        <item>Yellow Scarves General</item>
+        <item>Yosei, the Morning Star</item>
+
+        <item>Zuran Enchanter</item>
+        <item>Zuran Orb</item>
+    </string-array>
+</resources>

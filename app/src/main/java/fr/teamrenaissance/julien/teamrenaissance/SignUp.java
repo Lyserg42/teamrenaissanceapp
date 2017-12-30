@@ -25,7 +25,7 @@ import com.android.volley.Response;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SignUp extends AppCompatActivity implements LoaderCallbacks<Cursor> {
+public class SignUp extends AppCompatActivity {
 
     public static final String TAG = "SignUpActivity";
 
@@ -138,21 +138,6 @@ public class SignUp extends AppCompatActivity implements LoaderCallbacks<Cursor>
             };
             queue.add(stringRequest);
         }
-    }
-
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return null;
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-
     }
 
     private boolean isEmailValid(String email) {

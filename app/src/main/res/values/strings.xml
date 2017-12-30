@@ -18,6 +18,16 @@
     <string name="passwordPlaceholder">Mot de passe</string>
     <string name="confirmPlaceholder">Confirmer</string>
     <string name="signUpButton">S\'inscrire</string>
+    <!-- Profil edit-->
+    <string name="dciPlaceholder">DCI</string>
+    <string name="phonePlaceholder">Téléphone</string>
+    <string name="addressPlaceholder">Adresse</string>
+    <string name="zipcodePlaceholder">Code Postal</string>
+    <string name="cityPlaceholder">Ville</string>
+    <string name="fbPlaceholder">Facebook</string>
+    <string name="twPlaceholder">Twitter</string>
+    <string name="avatarPlaceholder">Avatar</string>
+    <string name="valideButton">Valider changements</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
@@ -25,6 +35,7 @@
     <string name="action_sign_in">Sign in or register</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_empty_password">Password cannot be empty</string>
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_invalid_confirmPassword">The password and it\'s confirm are not the same</string>
     <string name="error_incorrect_password">This password is incorrect</string>
@@ -34,4 +45,9 @@
     </string>
     <string name="title_activity_sing_up">Sign up</string>
     <string name="title_activity_maps">Map</string>
+
+    <!-- Strings related to Emprunter -->
+    <string name="error_empty_quantity">Quantity is invalid</string>
+    <string name="error_empty_card">Card cannot be empty</string>
+    <string name="error_empty_textarea">Cards cannot be empty</string>
 </resources>

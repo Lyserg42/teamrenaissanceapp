@@ -44,6 +44,7 @@ public class Profil extends Fragment implements OnMapReadyCallback {
     private TextView email;
     private ImageView facebook;
     private ImageView twitter;
+    private ImageView edit;
 
     private SupportMapFragment mapFragment;
     private GoogleMap mMap;
@@ -80,6 +81,8 @@ public class Profil extends Fragment implements OnMapReadyCallback {
         email = (TextView) view.findViewById(R.id.email);
         facebook = (ImageView) view.findViewById(R.id.fb);
         twitter = (ImageView) view.findViewById(R.id.tw);
+        edit = (ImageView) view.findViewById(R.id.edit);
+
 
         /*TODO
         int id = getResources().getIdentifier("lyserg", "drawable", getContext().getPackageName());
@@ -116,6 +119,13 @@ public class Profil extends Fragment implements OnMapReadyCallback {
                 /*TODO
                 intent(myApplication.getTwitter());*/
                 intent("https://twitter.com/lyserg42?lang=fr");
+            }
+        });
+        edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), ProfilEdit.class);
+                startActivity(intent);
             }
         });
         /* TODO
