@@ -25,9 +25,16 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import fr.teamrenaissance.julien.teamrenaissance.beans.Card;
+import fr.teamrenaissance.julien.teamrenaissance.beans.LoanBorrow;
+import fr.teamrenaissance.julien.teamrenaissance.beans.Tournament;
 import fr.teamrenaissance.julien.teamrenaissance.utils.MyApplication;
 import fr.teamrenaissance.julien.teamrenaissance.utils.TournamentItem;
 
@@ -37,6 +44,7 @@ public class Mesprets extends Fragment {
 
     private int tournamentId;
     JSONObject result;
+    List<Tournament> tournamentList = new ArrayList<>();
 
     public static Fragment newInstance(){
         Mesprets fragment = new Mesprets();
@@ -125,11 +133,17 @@ public class Mesprets extends Fragment {
                     "\t\t}]\n" +
                     "\t}]\n" +
                     "}";
+
+            /*//TODO
+            data = "{\"tournaments\":[]}";*/
+
             result = new JSONObject(data);
         }catch (JSONException e){
             e.printStackTrace();
         }
          /*----------------------------------*/
+        parserResult(result);
+
 
         //Tournois-drip down
         Spinner spinner = view.findViewById(R.id.spinner);
@@ -152,15 +166,16 @@ public class Mesprets extends Fragment {
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
-                //TODO idee: comment afficher different view en fonction de switch??
+                //TODO autre idee: comment afficher different view en fonction de switch??
                 switch (checkedId){
                     case R.id.jePrete:
+                        addViews(tournamentId, "lentCards");
                         break;
                     case R.id.onMePrete:
-                        //test
-                        addonMePrete();
+                        addViews(tournamentId, "borrowedCards");
                         break;
                     case R.id.ilMeManque:
+                        addViews(tournamentId, "demandes");
                         break;
                     default:
                         Log.d(TAG,"How to monitor????");
@@ -207,7 +222,70 @@ public class Mesprets extends Fragment {
         queue.add(request);
     }
 
-    private void addonMePrete(){
+    private void parserResult(JSONObject result){
+        try {
+            JSONArray array = result.getJSONArray("tournaments");
+
+            for(int i=0; i< array.length(); i++){
+                Tournament tournament = new Tournament();
+                tournament.setDate(array.getJSONObject(i).getString("date"));
+                tournament.settId(array.getJSONObject(i).getInt("tId"));
+                tournament.settName(array.getJSONObject(i).getString("tName"));
+
+                List<LoanBorrow> borrowsList = new ArrayList<>();
+                for(int b= 0; b< array.getJSONObject(i).getJSONArray("borrowedCards").length(); b++){
+                    LoanBorrow borrowed = new LoanBorrow();
+                    borrowed.setuId(array.getJSONObject(i).getJSONArray("borrowedCards").getJSONObject(b).getInt("uId"));
+                    borrowed.setuName(array.getJSONObject(i).getJSONArray("borrowedCards").getJSONObject(b).getString("uName"));
+                    List<Card> borrowedCards = new ArrayList<>();
+                    for(int bc= 0; bc< array.getJSONObject(i).getJSONArray("borrowedCards").getJSONObject(b).getJSONArray("cards").length(); bc++){
+                        Card c1 = new Card();
+                        c1.setcId((array.getJSONObject(i).getJSONArray("borrowedCards").getJSONObject(b).getJSONArray("cards")).getJSONObject(bc).getInt("cId"));
+                        c1.setcName((array.getJSONObject(i).getJSONArray("borrowedCards").getJSONObject(b).getJSONArray("cards")).getJSONObject(bc).getString("cName"));
+                        c1.setQty((array.getJSONObject(i).getJSONArray("borrowedCards").getJSONObject(b).getJSONArray("cards")).getJSONObject(bc).getInt("qty"));
+                        borrowedCards.add(c1);
+                    }
+                    borrowed.setCards(borrowedCards);
+                    borrowsList.add(borrowed);
+                }
+                tournament.setBorrowedCards(borrowsList);
+
+                List<LoanBorrow> lentsList = new ArrayList<>();
+                for(int l= 0; l< array.getJSONObject(i).getJSONArray("lentCards").length(); l++){
+                    LoanBorrow lent = new LoanBorrow();
+                    lent.setuId(array.getJSONObject(i).getJSONArray("lentCards").getJSONObject(l).getInt("uId"));
+                    lent.setuName(array.getJSONObject(i).getJSONArray("lentCards").getJSONObject(l).getString("uName"));
+                    List<Card> lentCards = new ArrayList<>();
+                    for(int lc= 0; lc< array.getJSONObject(i).getJSONArray("lentCards").getJSONObject(l).getJSONArray("cards").length(); lc++){
+                        Card c2 = new Card();
+                        c2.setcId((array.getJSONObject(i).getJSONArray("lentCards").getJSONObject(l).getJSONArray("cards")).getJSONObject(lc).getInt("cId"));
+                        c2.setcName((array.getJSONObject(i).getJSONArray("lentCards").getJSONObject(l).getJSONArray("cards")).getJSONObject(lc).getString("cName"));
+                        c2.setQty((array.getJSONObject(i).getJSONArray("lentCards").getJSONObject(l).getJSONArray("cards")).getJSONObject(lc).getInt("qty"));
+                        lentCards.add(c2);
+                    }
+                    lent.setCards(lentCards);
+                    lentsList.add(lent);
+                }
+                tournament.setLentCards(lentsList);
+
+                List<Card> demandsCard = new ArrayList<>();
+                for(int d= 0; d<array.getJSONObject(i).getJSONArray("demands").length(); d++){
+                    Card c3 = new Card();
+                    c3.setcId((array.getJSONObject(i).getJSONArray("demands")).getJSONObject(d).getInt("cId"));
+                    c3.setcName((array.getJSONObject(i).getJSONArray("demands")).getJSONObject(d).getString("cName"));
+                    c3.setQty((array.getJSONObject(i).getJSONArray("demands")).getJSONObject(d).getInt("qty"));
+                    demandsCard.add(c3);
+                }
+                tournament.setDemands(demandsCard);
+                tournamentList.add(tournament);
+            }
+
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+    }
+
+    private void addViews(int tournamentId, String status){
         RelativeLayout relative = getView().findViewById(R.id.mesprets_form);
 
         TextView user = new TextView(getContext());
