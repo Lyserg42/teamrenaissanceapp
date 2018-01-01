@@ -1,18 +1,20 @@
 package fr.teamrenaissance.julien.teamrenaissance;
 
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.res.ResourcesCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.RadioGroup;
-import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -42,7 +44,8 @@ import fr.teamrenaissance.julien.teamrenaissance.utils.TournamentItem;
 public class Mesprets extends Fragment {
     public static final String TAG = "Mesprets";
 
-    private int tournamentId;
+    private int tournamentId = -100;
+    private String option = "jePrete";
     JSONObject result;
     List<Tournament> tournamentList = new ArrayList<>();
 
@@ -61,8 +64,53 @@ public class Mesprets extends Fragment {
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        //par defaut, view Tournois-drip down
+        Spinner spinner = view.findViewById(R.id.spinner);
+        ArrayAdapter<TournamentItem> adapter = new ArrayAdapter<>(view.getContext(),
+                R.layout.support_simple_spinner_dropdown_item, new TournamentItem().mesPrete_tournamentItems());
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                tournamentId = ((TournamentItem) parent.getSelectedItem()).getId();
+                addNewViews();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+        //par defaut, view tabs:je prete | on me prete | il me manque
+        RadioGroup radioGroup = view.findViewById(R.id.radiogroup);
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
+                switch (checkedId){
+                    case R.id.jePrete:
+                        option = "jePrete";
+                        addNewViews();//lentCards
+                        break;
+                    case R.id.onMePrete:
+                        option = "onMePrete";
+                        addNewViews();//borrowedCards
+                        break;
+                    case R.id.ilMeManque:
+                        option = "ilMeManque";
+                        addNewViews();//demandes
+                        break;
+                    default:
+                        Log.d(TAG,"How to monitor????");
+                        break;
+                }
+
+            }
+        });
+
         //TODO status code 401, comment traiter "session" ??
+        // quand on charge cette page, d'abord recuperer les donnees depuis le serveur pour que apres l'on ajouter des views correspondantes en dynamique
         mesPretsTask();
+
         /*-----------TODO tester, delete-----------------------*/
         try {
             String data = "{\n" +
@@ -141,49 +189,12 @@ public class Mesprets extends Fragment {
         }catch (JSONException e){
             e.printStackTrace();
         }
-         /*----------------------------------*/
+         /*---------------delete-------------------*/
+
+        //parser le donnees et donner jsonArray au variable globale tournamentList
         parserResult(result);
-
-
-        //Tournois-drip down
-        Spinner spinner = view.findViewById(R.id.spinner);
-        ArrayAdapter<TournamentItem> adapter = new ArrayAdapter<>(view.getContext(),
-                R.layout.support_simple_spinner_dropdown_item, new TournamentItem().mesPrete_tournamentItems());
-        spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                tournamentId = ((TournamentItem) parent.getSelectedItem()).getId();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
-
-        //tabs:je prete | on me prete | il me manque
-        RadioGroup radioGroup = view.findViewById(R.id.radiogroup);
-        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
-                //TODO autre idee: comment afficher different view en fonction de switch??
-                switch (checkedId){
-                    case R.id.jePrete:
-                        addViews(tournamentId, "lentCards");
-                        break;
-                    case R.id.onMePrete:
-                        addViews(tournamentId, "borrowedCards");
-                        break;
-                    case R.id.ilMeManque:
-                        addViews(tournamentId, "demandes");
-                        break;
-                    default:
-                        Log.d(TAG,"How to monitor????");
-                        break;
-                }
-
-            }
-        });
+        //afficher les <<je prete>> de tous les tournois(id = -100) par defaut
+        addNewViews();
     }
 
     @Override
@@ -191,36 +202,117 @@ public class Mesprets extends Fragment {
         super.onDestroyView();
     }
 
-    private void mesPretsTask(){
-        RequestQueue queue = Volley.newRequestQueue(getContext());
-        String url = "https://teamrenaissance.fr/loan?request=mesprets";
+    private void addNewViews(){
+        List<Tournament> new_tournamentList = new ArrayList<>();
+        if(-100 == tournamentId){
+            new_tournamentList = tournamentList;
+        }else {
+            for(Tournament tournament: tournamentList){
+                if(tournamentId == tournament.gettId()){
+                    new_tournamentList.add(tournament);
+                }
+            }
 
-        final JsonObjectRequest request = new JsonObjectRequest(
-                Request.Method.GET,
-                url,
-                null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.i(TAG, "response: " + response.toString());
-                        result = response;
-                    }
-                },
-                new Response.ErrorListener(){
-                    @Override
-                    public void onErrorResponse(VolleyError error){
-                        Log.i(TAG, "error with: " + error.getMessage());
-                        if (error.networkResponse != null)
-                            Log.i(TAG, "status code: " + error.networkResponse.statusCode);
+        }
+        newViews(new_tournamentList, option);
+    }
+
+    private void newViews(List<Tournament> tournaments, String option){
+        int img[] = {R.drawable.edit};
+        Drawable drawable= ResourcesCompat.getDrawable(getResources(), img[0], null);
+        drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+
+        // int i =1;
+        LinearLayout mesprets_form = getView().findViewById(R.id.mesprets_form);
+        if(getView().findViewById(Integer.valueOf(1)) != null){
+            mesprets_form.removeView(getView().findViewById(Integer.valueOf(1)));
+        }
+        LinearLayout new_form = new LinearLayout(getContext());
+        new_form.setOrientation(LinearLayout.VERTICAL);
+        new_form.setId(Integer.valueOf(1));
+        //i++;
+
+        for(Tournament tournament: tournaments){
+            TextView tournamentName = new TextView(getContext());
+            LinearLayout.LayoutParams tnp = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+            tnp.leftMargin = 50;
+            tnp.topMargin = 30;
+            tournamentName.setLayoutParams(tnp);
+
+            //tournamentName.setId(Integer.valueOf(i));
+            //i++;
+            tournamentName.setText(tournament.gettName() + " du " + tournament.getDate());
+            tournamentName.setBackgroundColor(Color.LTGRAY);
+
+            new_form.addView(tournamentName);
+
+            if("jePrete".equals(option)) {
+                for (LoanBorrow lb : tournament.getLentCards()) {
+                    TextView userName = new TextView(getContext());
+                    LinearLayout.LayoutParams unp = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+                    unp.leftMargin = 50;
+                    userName.setLayoutParams(unp);
+                    //userName.setId(Integer.valueOf(i));
+                    //i++;
+                    userName.setText(lb.getuName());
+                    userName.setTextColor(Color.parseColor("#c8e8ff"));
+                    userName.setCompoundDrawables(null, null, drawable, null);//set drawableRight
+                    userName.setCompoundDrawablePadding(15);
+                    new_form.addView(userName);
+
+                    for (Card c : lb.getCards()) {
+                        TextView card = new TextView(getContext());
+                        LinearLayout.LayoutParams cp = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+                        cp.leftMargin = 50;
+                        card.setLayoutParams(cp);
+
+                        card.setText(c.getQty() + " " + c.getcName());
+                        new_form.addView(card);
                     }
                 }
-        );
+            }else if("onMePrete".equals(option)){
+                for (LoanBorrow lb : tournament.getBorrowedCards()) {
+                    TextView userName = new TextView(getContext());
+                    LinearLayout.LayoutParams unp = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+                    unp.leftMargin = 50;
+                    userName.setLayoutParams(unp);
+                    //userName.setId(Integer.valueOf(i));
+                    //i++;
+                    userName.setText(lb.getuName());
+                    userName.setTextColor(Color.parseColor("#c8e8ff"));
+                    userName.setCompoundDrawables(null, null, drawable, null);//set drawableRight
+                    userName.setCompoundDrawablePadding(15);
+                    new_form.addView(userName);
 
-        request.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        request.setTag("GET");
-        queue.add(request);
+                    for (Card c : lb.getCards()) {
+                        TextView card = new TextView(getContext());
+                        LinearLayout.LayoutParams cp = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+                        cp.leftMargin = 50;
+                        card.setLayoutParams(cp);
+
+                        card.setText(c.getQty() + " " + c.getcName());
+                        new_form.addView(card);
+                    }
+                }
+            }else if("ilMeManque".equals(option)){
+                for (Card c : tournament.getDemands()) {
+                    TextView card = new TextView(getContext());
+                    LinearLayout.LayoutParams cp = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+                    cp.leftMargin = 50;
+                    card.setLayoutParams(cp);
+
+                    card.setText(c.getQty() + " " + c.getcName());
+                    new_form.addView(card);
+                }
+            }
+
+        }
+
+        mesprets_form.addView(new_form);
+
     }
+
+
 
     private void parserResult(JSONObject result){
         try {
@@ -283,20 +375,38 @@ public class Mesprets extends Fragment {
         }catch (JSONException e){
             e.printStackTrace();
         }
+
     }
 
-    private void addViews(int tournamentId, String status){
-        RelativeLayout relative = getView().findViewById(R.id.mesprets_form);
+    private void mesPretsTask(){
+        RequestQueue queue = Volley.newRequestQueue(getContext());
+        String url = "https://teamrenaissance.fr/loan?request=mesprets";
 
-        TextView user = new TextView(getContext());
-        user.setId(Integer.valueOf(1));
-        RelativeLayout.LayoutParams lp=new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
-        lp.addRule(RelativeLayout.BELOW, getView().findViewById(R.id.radiogroup).getId());
-        lp.leftMargin= 50;
-        user.setLayoutParams(lp);
-        user.setText("Test");
-        user.setTextSize(15);
-        user.setTextColor(Color.BLUE);
-        relative.addView(user);
+        final JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.GET,
+                url,
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.i(TAG, "response: " + response.toString());
+                        result = response;
+                    }
+                },
+                new Response.ErrorListener(){
+                    @Override
+                    public void onErrorResponse(VolleyError error){
+                        Log.i(TAG, "error with: " + error.getMessage());
+                        if (error.networkResponse != null)
+                            Log.i(TAG, "status code: " + error.networkResponse.statusCode);
+                    }
+                }
+        );
+
+        request.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        request.setTag("GET");
+        queue.add(request);
     }
+
 }
