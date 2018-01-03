@@ -74,6 +74,8 @@
 </LinearLayout>
 
     <!-- Remarques:
+        -methode <<addView>> pour ajouter dynamiquement des views
+
         todo:
         implements LoaderCallbacks<Cursor> pour loader image
 

@@ -34,9 +34,13 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.support.v4.app.DialogFragment;
+
 import fr.teamrenaissance.julien.teamrenaissance.beans.Card;
+import fr.teamrenaissance.julien.teamrenaissance.beans.Dialog;
 import fr.teamrenaissance.julien.teamrenaissance.beans.LoanBorrow;
 import fr.teamrenaissance.julien.teamrenaissance.beans.Tournament;
+import fr.teamrenaissance.julien.teamrenaissance.utils.DialogFragmentHelper;
 import fr.teamrenaissance.julien.teamrenaissance.utils.MyApplication;
 import fr.teamrenaissance.julien.teamrenaissance.utils.TournamentItem;
 
@@ -116,34 +120,62 @@ public class Mesprets extends Fragment {
             String data = "{\n" +
                     "\t\"tournaments\": [{\n" +
                     "\t\t\"date\": \"2018-02-02\",\n" +
-                    "\t\t\"borrowedCards\": [],\n" +
+                    "\t\t\"borrowedCards\": [{\n" +
+                    "\t\t\t\"uId\": 2,\n" +
+                    "\t\t\t\"cards\": [{\n" +
+                    "\t\t\t\t\"cName\": \"Black Lotus\",\n" +
+                    "\t\t\t\t\"qty\": 3,\n" +
+                    "\t\t\t\t\"cId\": 9299\n" +
+                    "\t\t\t}],\n" +
+                    "\t\t\t\"uName\": \"lijuan\"\n" +
+                    "\t\t}],\n" +
                     "\t\t\"lentCards\": [],\n" +
                     "\t\t\"tName\": \"PT Bilbao\",\n" +
                     "\t\t\"tId\": 13,\n" +
                     "\t\t\"demands\": [{\n" +
                     "\t\t\t\"cName\": \"Black Lotus\",\n" +
-                    "\t\t\t\"qty\": 5,\n" +
+                    "\t\t\t\"qty\": 2,\n" +
                     "\t\t\t\"cId\": 9299\n" +
                     "\t\t}]\n" +
                     "\t}, {\n" +
                     "\t\t\"date\": \"2018-01-27\",\n" +
-                    "\t\t\"borrowedCards\": [],\n" +
+                    "\t\t\"borrowedCards\": [{\n" +
+                    "\t\t\t\"uId\": 2,\n" +
+                    "\t\t\t\"cards\": [{\n" +
+                    "\t\t\t\t\"cName\": \"Porphyry Nodes\",\n" +
+                    "\t\t\t\t\"qty\": 1,\n" +
+                    "\t\t\t\t\"cId\": 21355\n" +
+                    "\t\t\t}],\n" +
+                    "\t\t\t\"uName\": \"lijuan\"\n" +
+                    "\t\t}],\n" +
                     "\t\t\"lentCards\": [],\n" +
                     "\t\t\"tName\": \"GP London\",\n" +
                     "\t\t\"tId\": 12,\n" +
-                    "\t\t\"demands\": [{\n" +
-                    "\t\t\t\"cName\": \"Porphyry Nodes\",\n" +
-                    "\t\t\t\"qty\": 1,\n" +
-                    "\t\t\t\"cId\": 21355\n" +
-                    "\t\t}]\n" +
+                    "\t\t\"demands\": []\n" +
                     "\t}, {\n" +
                     "\t\t\"date\": \"2017-12-09\",\n" +
-                    "\t\t\"borrowedCards\": [],\n" +
+                    "\t\t\"borrowedCards\": [{\n" +
+                    "\t\t\t\"uId\": 2,\n" +
+                    "\t\t\t\"cards\": [{\n" +
+                    "\t\t\t\t\"cName\": \"Tezzeret, Agent of Bolas\",\n" +
+                    "\t\t\t\t\"qty\": 1,\n" +
+                    "\t\t\t\t\"cId\": 15132\n" +
+                    "\t\t\t}],\n" +
+                    "\t\t\t\"uName\": \"lijuan\"\n" +
+                    "\t\t}],\n" +
                     "\t\t\"lentCards\": [{\n" +
+                    "\t\t\t\"uId\": 3,\n" +
+                    "\t\t\t\"cards\": [{\n" +
+                    "\t\t\t\t\"cName\": \"Snapcaster Mage\",\n" +
+                    "\t\t\t\t\"qty\": 2,\n" +
+                    "\t\t\t\t\"cId\": 2343\n" +
+                    "\t\t\t}],\n" +
+                    "\t\t\t\"uName\": \"Balkany\"\n" +
+                    "\t\t}, {\n" +
                     "\t\t\t\"uId\": 1,\n" +
                     "\t\t\t\"cards\": [{\n" +
                     "\t\t\t\t\"cName\": \"Mox Opal\",\n" +
-                    "\t\t\t\t\"qty\": 2,\n" +
+                    "\t\t\t\t\"qty\": 1,\n" +
                     "\t\t\t\t\"cId\": 3792\n" +
                     "\t\t\t}, {\n" +
                     "\t\t\t\t\"cName\": \"Glimmervoid\",\n" +
@@ -155,14 +187,6 @@ public class Mesprets extends Fragment {
                     "\t\t\t\t\"cId\": 15132\n" +
                     "\t\t\t}],\n" +
                     "\t\t\t\"uName\": \"Lyserg\"\n" +
-                    "\t\t}, {\n" +
-                    "\t\t\t\"uId\": 3,\n" +
-                    "\t\t\t\"cards\": [{\n" +
-                    "\t\t\t\t\"cName\": \"Snapcaster Mage\",\n" +
-                    "\t\t\t\t\"qty\": 2,\n" +
-                    "\t\t\t\t\"cId\": 2343\n" +
-                    "\t\t\t}],\n" +
-                    "\t\t\t\"uName\": \"Balkany\"\n" +
                     "\t\t}],\n" +
                     "\t\t\"tName\": \"GP Madrid\",\n" +
                     "\t\t\"tId\": 11,\n" +
@@ -172,18 +196,11 @@ public class Mesprets extends Fragment {
                     "\t\t\t\"cId\": 2514\n" +
                     "\t\t}, {\n" +
                     "\t\t\t\"cName\": \"Mox Opal\",\n" +
-                    "\t\t\t\"qty\": 2,\n" +
-                    "\t\t\t\"cId\": 3792\n" +
-                    "\t\t}, {\n" +
-                    "\t\t\t\"cName\": \"Tezzeret, Agent of Bolas\",\n" +
                     "\t\t\t\"qty\": 1,\n" +
-                    "\t\t\t\"cId\": 15132\n" +
+                    "\t\t\t\"cId\": 3792\n" +
                     "\t\t}]\n" +
                     "\t}]\n" +
                     "}";
-
-            /*//TODO
-            data = "{\"tournaments\":[]}";*/
 
             result = new JSONObject(data);
         }catch (JSONException e){
@@ -195,6 +212,8 @@ public class Mesprets extends Fragment {
         parserResult(result);
         //afficher les <<je prete>> de tous les tournois(id = -100) par defaut
         addNewViews();
+
+
     }
 
     @Override
@@ -232,7 +251,7 @@ public class Mesprets extends Fragment {
         new_form.setId(Integer.valueOf(1));
         //i++;
 
-        for(Tournament tournament: tournaments){
+        for(final Tournament tournament: tournaments){
             TextView tournamentName = new TextView(getContext());
             LinearLayout.LayoutParams tnp = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
             tnp.leftMargin = 50;
@@ -247,7 +266,7 @@ public class Mesprets extends Fragment {
             new_form.addView(tournamentName);
 
             if("jePrete".equals(option)) {
-                for (LoanBorrow lb : tournament.getLentCards()) {
+                for (final LoanBorrow lb : tournament.getLentCards()) {
                     TextView userName = new TextView(getContext());
                     LinearLayout.LayoutParams unp = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
                     unp.leftMargin = 50;
@@ -258,6 +277,20 @@ public class Mesprets extends Fragment {
                     userName.setTextColor(Color.parseColor("#c8e8ff"));
                     userName.setCompoundDrawables(null, null, drawable, null);//set drawableRight
                     userName.setCompoundDrawablePadding(15);
+                    userName.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Dialog dialogContent = new Dialog();
+                            dialogContent.settId(tournament.gettId());
+                            dialogContent.setuId(lb.getuId());
+                            dialogContent.setType("pret");
+                            dialogContent.setTitle("Modifier");
+                            dialogContent.setCards(lb.getCards());
+
+                            DialogFragment dialog = DialogFragmentHelper.newInstance(dialogContent);//將EditText值傳送給DialogFragment
+                            dialog.show(getFragmentManager(),"dialog");//afficher dialog
+                        }
+                    });
                     new_form.addView(userName);
 
                     for (Card c : lb.getCards()) {
@@ -271,7 +304,7 @@ public class Mesprets extends Fragment {
                     }
                 }
             }else if("onMePrete".equals(option)){
-                for (LoanBorrow lb : tournament.getBorrowedCards()) {
+                for (final LoanBorrow lb : tournament.getBorrowedCards()) {
                     TextView userName = new TextView(getContext());
                     LinearLayout.LayoutParams unp = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
                     unp.leftMargin = 50;
@@ -282,6 +315,20 @@ public class Mesprets extends Fragment {
                     userName.setTextColor(Color.parseColor("#c8e8ff"));
                     userName.setCompoundDrawables(null, null, drawable, null);//set drawableRight
                     userName.setCompoundDrawablePadding(15);
+                    userName.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Dialog dialogContent = new Dialog();
+                            dialogContent.settId(tournament.gettId());
+                            dialogContent.setuId(lb.getuId());
+                            dialogContent.setType("emprunt");
+                            dialogContent.setTitle("Modifier");
+                            dialogContent.setCards(lb.getCards());
+
+                            DialogFragment dialog = DialogFragmentHelper.newInstance(dialogContent);//將EditText值傳送給DialogFragment
+                            dialog.show(getFragmentManager(),"dialog");//afficher dialog
+                        }
+                    });
                     new_form.addView(userName);
 
                     for (Card c : lb.getCards()) {
@@ -295,13 +342,34 @@ public class Mesprets extends Fragment {
                     }
                 }
             }else if("ilMeManque".equals(option)){
-                for (Card c : tournament.getDemands()) {
+                //for (Card c : tournament.getDemands()) {
+                for (int i= 0; i< tournament.getDemands().size(); i++) {
                     TextView card = new TextView(getContext());
                     LinearLayout.LayoutParams cp = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
                     cp.leftMargin = 50;
                     card.setLayoutParams(cp);
 
-                    card.setText(c.getQty() + " " + c.getcName());
+                    //card.setText(c.getQty() + " " + c.getcName());
+                    card.setText(tournament.getDemands().get(i).getQty() + " " + tournament.getDemands().get(i).getcName());
+                    if(i== 0){
+                        card.setCompoundDrawables(null, null, drawable, null);//set drawableRight
+                        card.setCompoundDrawablePadding(15);
+                        card.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Dialog dialogContent = new Dialog();
+                                dialogContent.settId(tournament.gettId());
+                                //TODO MyApplication, ou rien
+                                //dialogContent.setuId();
+                                dialogContent.setType("demande");
+                                dialogContent.setTitle("Modifier");
+                                dialogContent.setCards(tournament.getDemands());
+
+                                DialogFragment dialog = DialogFragmentHelper.newInstance(dialogContent);//將EditText值傳送給DialogFragment
+                                dialog.show(getFragmentManager(),"dialog");//afficher dialog
+                            }
+                        });
+                    }
                     new_form.addView(card);
                 }
             }

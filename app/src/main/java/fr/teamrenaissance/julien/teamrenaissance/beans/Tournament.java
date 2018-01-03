@@ -3,12 +3,12 @@ package fr.teamrenaissance.julien.teamrenaissance.beans;
 import java.util.List;
 
 public class Tournament {
-    String date;
-    String tName;
-    int tId;
-    List<LoanBorrow> borrowedCards;
-    List<LoanBorrow> lentCards;
-    List<Card> demands;
+    private String date;
+    private String tName;
+    private int tId;
+    private List<LoanBorrow> borrowedCards;
+    private List<LoanBorrow> lentCards;
+    private List<Card> demands;
 
     public Tournament() {
     }

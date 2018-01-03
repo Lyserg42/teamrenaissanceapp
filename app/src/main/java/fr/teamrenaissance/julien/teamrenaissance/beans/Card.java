@@ -3,9 +3,9 @@ package fr.teamrenaissance.julien.teamrenaissance.beans;
 
 public class Card {
 
-    int cId;
-    String cName;
-    int qty;
+    private int cId;
+    private String cName;
+    private int qty;
 
     public Card() {
     }

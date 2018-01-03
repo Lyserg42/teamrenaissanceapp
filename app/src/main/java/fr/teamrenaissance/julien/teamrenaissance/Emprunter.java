@@ -159,7 +159,6 @@ public class Emprunter extends Fragment {
             String url = "https://teamrenaissance.fr/loan";
 
             JSONObject dataJSON = new JSONObject();
-            JSONObject card = new JSONObject();
             JSONArray cards = new JSONArray();
             try {
                 dataJSON.put("tId", tournamentId);
@@ -175,6 +174,7 @@ public class Emprunter extends Fragment {
                     //remplacer les numeros par des espaces, et supprimer les espaces de debut et de fin
                     carte = carte.replaceAll("([1-9]+[0-9]*|0)(\\.[\\d]+)?", "").trim();
 
+                    JSONObject card = new JSONObject();
                     card.put("qty",  Integer.valueOf(m.replaceAll("").trim()));
                     card.put("cName", carte);
                     cards.put(card);

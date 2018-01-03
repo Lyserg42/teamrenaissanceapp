@@ -3,9 +3,9 @@ package fr.teamrenaissance.julien.teamrenaissance.beans;
 import java.util.List;
 
 public class LoanBorrow {
-    int uId;
-    String uName;
-    List<Card> cards;
+    private int uId;
+    private String uName;
+    private List<Card> cards;
 
     public LoanBorrow() {
     }
