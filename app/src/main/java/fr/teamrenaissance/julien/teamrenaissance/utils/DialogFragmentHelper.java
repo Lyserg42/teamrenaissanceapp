@@ -3,7 +3,9 @@ package fr.teamrenaissance.julien.teamrenaissance.utils;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.text.InputFilter;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -74,6 +76,8 @@ public class DialogFragmentHelper extends DialogFragment{
             RelativeLayout relativeLayout = new RelativeLayout(getContext());
             linearLayout.addView(relativeLayout);
             EditText cardQty = new EditText(getContext());
+            //le chiffre doit etre entre 0 et nombre demande
+            cardQty.setFilters(new InputFilter[]{ new InputFilterMinMax(0, card.getQty())});
             RelativeLayout.LayoutParams cp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
             cp.leftMargin= 50;
             cp.topMargin= 15;
@@ -107,27 +111,43 @@ public class DialogFragmentHelper extends DialogFragment{
         btn_confirm.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-               //reecrire la liste de card d'objet Dialog
-                List<Card> card_newQty = new ArrayList<Card>();
-
-                for(int j= 0; j< cards.size(); j++){
-                    //faire attention ici c'est view(la meme avec la ligne 56) mais pas v(argument de la methode onClick)
-                    System.out.println(".......apres modification=="+((EditText)view.findViewById(Integer.valueOf(j+1))).getText() +"&"+cards.get(j).getcName());
-                    Card card = new Card();
-                    card.setcId(cards.get(j).getcId());
-                    card.setcName(cards.get(j).getcName());
-                    card.setQty(Integer.valueOf( ((EditText)view.findViewById(Integer.valueOf(j+1))).getText().toString()) );
-                    card_newQty.add(card);
+                View focusView = null;
+                boolean cancel = false;
+                //pour assurer que l'input d'editText n'est pas null
+                for(int j= 0; j< cards.size(); j++) {
+                    if (TextUtils.isEmpty(((EditText)view.findViewById(Integer.valueOf(j+1))).getText())) {
+                        EditText editTextView =(EditText)view.findViewById(Integer.valueOf(j+1));
+                        editTextView.setError(getString(R.string.error_field_required));
+                        focusView = editTextView;
+                        cancel = true;
+                    }
                 }
-                dialog.setCards(card_newQty);
 
-                //TODO status code: 401
-                //envoyer une requete <<put>> au serveur
-                modifyTask(dialog);
+                if (cancel) {
+                    focusView.requestFocus();
+                } else {
+                    //reecrire la liste de card d'objet Dialog
+                    List<Card> card_newQty = new ArrayList<Card>();
 
-                //TODO apres fermer dialog, verifier est-ce que les chiffres sur la page <<MES PRETES>> est synchronize ou pas
-                //fermer dialog
-                dismiss();
+                    for (int j = 0; j < cards.size(); j++) {
+                        //faire attention ici c'est view(la meme avec la ligne 57) mais pas v(argument de la methode onClick)
+                        System.out.println(".......apres modification==" + ((EditText) view.findViewById(Integer.valueOf(j + 1))).getText() + "&" + cards.get(j).getcName());
+                        Card card = new Card();
+                        card.setcId(cards.get(j).getcId());
+                        card.setcName(cards.get(j).getcName());
+                        card.setQty(Integer.valueOf(((EditText) view.findViewById(Integer.valueOf(j + 1))).getText().toString()));
+                        card_newQty.add(card);
+                    }
+                    dialog.setCards(card_newQty);
+
+                    //TODO status code: 401
+                    //envoyer une requete <<put>> au serveur
+                    modifyTask(dialog);
+
+                    //TODO apres fermer dialog, verifier est-ce que les chiffres sur la page <<MES PRETES>> est synchronize ou pas
+                    //fermer dialog
+                    dismiss();
+                }
             }
         } );
 
