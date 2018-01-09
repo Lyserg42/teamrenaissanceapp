@@ -20,6 +20,9 @@ public class MyApplication extends Application{
     private String email;
     private String avatar;
 
+    public MyApplication() {
+    }
+
     public MyApplication(Integer uID, String uName, String lastName, String firstName, String phone, String DCI, String address, String zipCode, String city, String facebook, String twitter, String email, String avatar) {
 
         this.uID = uID;

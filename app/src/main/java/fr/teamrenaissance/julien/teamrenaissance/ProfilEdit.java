@@ -53,28 +53,28 @@ public class ProfilEdit extends AppCompatActivity {
 
         pseudoView = (TextView) findViewById(R.id.pseudo);
         //TODO null or isEmpty???
-        if(null != myApplication.getUsername() || !TextUtils.isEmpty(myApplication.getUsername())){
-            pseudoView.setText(myApplication.getUsername());
+        if(null != myApplication.getuName() || !TextUtils.isEmpty(myApplication.getuName())){
+            pseudoView.setText(myApplication.getuName());
         }
 
         lastNameView = (EditText) findViewById(R.id.lastName);
-        if(null != myApplication.getName()){
-            lastNameView.setText(myApplication.getName());
+        if(null != myApplication.getLastName()){
+            lastNameView.setText(myApplication.getLastName());
         }
 
         firstNameView = (EditText) findViewById(R.id.firstName);
-        if(null != myApplication.getFirstname()){
-            firstNameView.setText(myApplication.getFirstname());
+        if(null != myApplication.getFirstName()){
+            firstNameView.setText(myApplication.getFirstName());
         }
 
         dciView = (EditText) findViewById(R.id.dci);
-        if(null != myApplication.getDciNumber()){
-            dciView.setText(myApplication.getDciNumber());
+        if(null != myApplication.getDCI()){
+            dciView.setText(myApplication.getDCI());
         }
 
         phoneView = (EditText) findViewById(R.id.phone);
-        if(null != myApplication.getPhoneNumber()){
-            phoneView.setText(myApplication.getPhoneNumber());
+        if(null != myApplication.getPhone()){
+            phoneView.setText(myApplication.getPhone());
         }
 
         addressView = (EditText) findViewById(R.id.address);
@@ -114,10 +114,11 @@ public class ProfilEdit extends AppCompatActivity {
 
         passwordView = (EditText) findViewById(R.id.password);
         confirmView = (EditText) findViewById(R.id.confirm);
+        /*TODO
         if(null != myApplication.getPassword()){
             passwordView.setText(myApplication.getPassword());
             confirmView.setText(myApplication.getPassword());
-        }
+        }*/
 
 
         valideButton = (Button) findViewById(R.id.valideButton);
