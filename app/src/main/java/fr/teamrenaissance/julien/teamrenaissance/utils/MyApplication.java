@@ -6,87 +6,84 @@ import android.app.Application;
 //to jump to, you can directly call the relevant information.
 public class MyApplication extends Application{
 
-    private Integer userID;
-    private String name;
-    private String firstname;
-    private String username;
-    private String email;
-    private String password;
+    private Integer uID;
+    private String uName;
+    private String lastName;
+    private String firstName;
+    private String phone;
+    private String DCI;
     private String address;
-    private String avatar;
-    private String dciNumber;
-    private String phoneNumber;
+    private String zipCode;
+    private String city;
     private String facebook;
     private String twitter;
-    private String city;
-    private String zipCode;
+    private String email;
+    private String avatar;
 
-    public MyApplication() {
-    }
+    public MyApplication(Integer uID, String uName, String lastName, String firstName, String phone, String DCI, String address, String zipCode, String city, String facebook, String twitter, String email, String avatar) {
 
-    public MyApplication(Integer userID, String name, String firstname, String username, String email, String password, String address, String avatar, String dciNumber, String phoneNumber, String facebook, String twitter, String city, String zipCode) {
-        this.userID = userID;
-        this.name = name;
-        this.firstname = firstname;
-        this.username = username;
-        this.email = email;
-        this.password = password;
+        this.uID = uID;
+        this.uName = uName;
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.phone = phone;
+        this.DCI = DCI;
         this.address = address;
-        this.avatar = avatar;
-        this.dciNumber = dciNumber;
-        this.phoneNumber = phoneNumber;
+        this.zipCode = zipCode;
+        this.city = city;
         this.facebook = facebook;
         this.twitter = twitter;
-        this.city = city;
-        this.zipCode = zipCode;
-    }
-
-    public Integer getUserID() {
-        return userID;
-    }
-
-    public void setUserID(Integer userID) {
-        this.userID = userID;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getFirstname() {
-        return firstname;
-    }
-
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
         this.email = email;
+        this.avatar = avatar;
     }
 
-    public String getPassword() {
-        return password;
+
+    public Integer getuID() {
+        return uID;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setuID(Integer uID) {
+        this.uID = uID;
+    }
+
+    public String getuName() {
+        return uName;
+    }
+
+    public void setuName(String uName) {
+        this.uName = uName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getDCI() {
+        return DCI;
+    }
+
+    public void setDCI(String DCI) {
+        this.DCI = DCI;
     }
 
     public String getAddress() {
@@ -97,28 +94,20 @@ public class MyApplication extends Application{
         this.address = address;
     }
 
-    public String getAvatar() {
-        return avatar;
+    public String getZipCode() {
+        return zipCode;
     }
 
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
     }
 
-    public String getDciNumber() {
-        return dciNumber;
+    public String getCity() {
+        return city;
     }
 
-    public void setDciNumber(String dciNumber) {
-        this.dciNumber = dciNumber;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setCity(String city) {
+        this.city = city;
     }
 
     public String getFacebook() {
@@ -137,19 +126,21 @@ public class MyApplication extends Application{
         this.twitter = twitter;
     }
 
-    public String getCity() {
-        return city;
+    public String getEmail() {
+        return email;
     }
 
-    public void setCity(String city) {
-        this.city = city;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public String getZipCode() {
-        return zipCode;
+    public String getAvatar() {
+        return avatar;
     }
 
-    public void setZipCode(String zipCode) {
-        this.zipCode = zipCode;
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
+
+
 }

@@ -19,6 +19,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -112,6 +113,11 @@ public class Login extends AppCompatActivity {
                             //TODO: mettre des infos d'utilisateur dans le variable global
                             //myApplication.setUserID("");...
                             //TODO: redirect to ...
+                           //TODO Julien
+                            updateInfosProfil();
+                            MyApplication profil = (MyApplication) getApplication();
+                            loginTest.setText(profil.getFirstName());
+
                             Intent intent = new Intent(getApplicationContext(), HomePage.class);
                             startActivity(intent);
                         }
@@ -133,20 +139,24 @@ public class Login extends AppCompatActivity {
             @Override
             public Map<String, String> getHeaders()  {
                 HashMap<String, String> header = new HashMap<String, String>();
-                //header.put("Accept","application/json");
-                //header.put("Content-Type","application/x-www-form-urlencoded");
                 header.put("Content-Type","application/json");
                 return header;
             }
 
             @Override
-            protected Map<String, String> getParams()
+            public byte[] getBody()
             {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("typeRequest","connexion");
-                params.put("login",login);
-                params.put("password",password);
-                return params;
+                JSONObject body = new JSONObject();
+                try {
+                    body.put("typeRequest","connexion");
+                    body.put("login",login);
+                    body.put("password",password);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                return body.toString().getBytes();
             }
         };
 
@@ -169,5 +179,60 @@ public class Login extends AppCompatActivity {
             }
         }, 16, 26, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         return spannableString;
+    }
+
+    public void updateInfosProfil(){
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url = "https://www.teamrenaissance.fr/user";
+        JSONObject dataJSON = new JSONObject();
+        try {
+            dataJSON.put("typeRequest","getUser");
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, dataJSON,
+                new Response.Listener<JSONObject>()
+                {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        MyApplication profil = (MyApplication) getApplication();
+                        try {
+                            profil.setAddress(response.get("uName").toString());
+                            profil.setAddress(response.get("firstName").toString());
+                            profil.setAddress(response.get("lastName").toString());
+                            profil.setAddress(response.get("phone").toString());
+                            profil.setAddress(response.get("DCI").toString());
+                            profil.setAddress(response.get("address").toString());
+                            profil.setAddress(response.get("zipCode").toString());
+                            profil.setAddress(response.get("city").toString());
+                            profil.setAddress(response.get("facebook").toString());
+                            profil.setAddress(response.get("twitter").toString());
+                            profil.setAddress(response.get("email").toString());
+                            profil.setAddress(response.get("avatar").toString());
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                },
+                new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error)
+                    {
+                        Log.i(TAG, "error with: " + error.getMessage());
+                        if (error.networkResponse != null)
+                            Log.i(TAG, "status code: " + error.networkResponse.statusCode);
+                    }
+                });
+
+        request.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        request.setTag("POST");
+        queue.add(request);
     }
 }

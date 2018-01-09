@@ -50,4 +50,7 @@
     <string name="error_empty_quantity">Quantity is invalid</string>
     <string name="error_empty_card">Card cannot be empty</string>
     <string name="error_empty_textarea">Cards cannot be empty</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>
