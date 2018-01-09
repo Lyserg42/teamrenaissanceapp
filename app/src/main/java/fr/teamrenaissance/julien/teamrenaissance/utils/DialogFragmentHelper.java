@@ -157,7 +157,10 @@ public class DialogFragmentHelper extends DialogFragment{
     private void modifyTask(Dialog dialog){
 
         RequestQueue queue = Volley.newRequestQueue(getContext());
-        String url = "https://teamrenaissance.fr/loan?request=modifier";
+        //pour la page MES PRETS, Modifier
+        String url_mesprets = "https://teamrenaissance.fr/loan?request=modifier";
+        //pour la page ACCUEIL, Preter
+        String url_accueil = "https://teamrenaissance.fr/loan?request=preter";
 
         JSONObject dataJSON = new JSONObject();
         JSONArray cards = new JSONArray();
@@ -166,7 +169,9 @@ public class DialogFragmentHelper extends DialogFragment{
             if(!"demande".equals(dialog.getType())){
                 dataJSON.put("uId", dialog.getuId());
             }
-            dataJSON.put("type", dialog.getType());
+            if(!"preter".equals(dialog.getType())) {
+                dataJSON.put("type", dialog.getType());
+            }
 
             for(Card card1: dialog.getCards()){
                 JSONObject card = new JSONObject();
@@ -184,7 +189,7 @@ public class DialogFragmentHelper extends DialogFragment{
 
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.POST,
-                url,
+                ("preter".equals(dialog.getType()))? url_accueil: url_mesprets,
                 dataJSON,
                 new Response.Listener<JSONObject>() {
                     @Override

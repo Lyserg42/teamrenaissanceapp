@@ -249,6 +249,10 @@ public class Mesprets extends Fragment {
         LinearLayout new_form = new LinearLayout(getContext());
         new_form.setOrientation(LinearLayout.VERTICAL);
         new_form.setId(Integer.valueOf(1));
+
+        //TODO findViewById new_form;
+        //new_form.removeAllViews();
+
         //i++;
 
         for(final Tournament tournament: tournaments){

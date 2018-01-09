@@ -106,12 +106,12 @@ public class SignUp extends AppCompatActivity {
                                 Toast.makeText(SignUp.this, "New User Created.", Toast.LENGTH_SHORT).show();
                                 //TODO: mettre des infos de l'utilisateur dans le variable global
                                 //TODO: redirect to
-                                Intent intent = new Intent(getApplicationContext(), Accueil.class);
+                                Intent intent = new Intent(getApplicationContext(), HomePage.class);
                                 startActivity(intent);
 
                             }else if("".equals(response)){
                                 Log.i(TAG, "response: " + response);
-                                Intent intent = new Intent(getApplicationContext(), Accueil.class);
+                                Intent intent = new Intent(getApplicationContext(), HomePage.class);
                                 startActivity(intent);
                             }else{
                                 passwordView.setError("Something went worng. Please try again!"+ response);

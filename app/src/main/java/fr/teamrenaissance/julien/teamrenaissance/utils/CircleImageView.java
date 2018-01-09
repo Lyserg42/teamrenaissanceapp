@@ -60,7 +60,11 @@ public class CircleImageView extends AppCompatImageView{
         int height = canvas.getHeight() - getPaddingTop() - getPaddingBottom();
         Bitmap image = drawableToBitmap(getDrawable());
         if (mIsCircle) {
-            Bitmap reSizeImage = reSizeImageC(image, width, height);
+            //TODO remplacer par
+            //if (this.reSizeImage == null)
+            //    this.reSizeImage = reSizeImageC(image, width, height);
+
+            Bitmap reSizeImage= reSizeImageC(image, width, height);
             canvas.drawBitmap(createCircleImage(reSizeImage, width, height),
                     getPaddingLeft(), getPaddingTop(), null);
 

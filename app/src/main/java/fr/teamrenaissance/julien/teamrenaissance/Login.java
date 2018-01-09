@@ -22,8 +22,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -114,7 +112,7 @@ public class Login extends AppCompatActivity {
                             //TODO: mettre des infos d'utilisateur dans le variable global
                             //myApplication.setUserID("");...
                             //TODO: redirect to ...
-                            Intent intent = new Intent(getApplicationContext(), Accueil.class);
+                            Intent intent = new Intent(getApplicationContext(), HomePage.class);
                             startActivity(intent);
                         }
 
@@ -135,8 +133,9 @@ public class Login extends AppCompatActivity {
             @Override
             public Map<String, String> getHeaders()  {
                 HashMap<String, String> header = new HashMap<String, String>();
-                header.put("Accept","application/json");
-                header.put("Content-Type","application/x-www-form-urlencoded");
+                //header.put("Accept","application/json");
+                //header.put("Content-Type","application/x-www-form-urlencoded");
+                header.put("Content-Type","application/json");
                 return header;
             }
 
