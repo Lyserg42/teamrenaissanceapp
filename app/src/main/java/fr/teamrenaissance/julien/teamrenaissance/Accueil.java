@@ -49,6 +49,7 @@ public class Accueil extends Fragment {
     private int tournamentId = -100;
     List<Tournament> tournamentList = new ArrayList<>();
     JSONObject result;
+    View globalView;
 
     public static Fragment newInstance(){
         Accueil fragment = new Accueil();
@@ -65,12 +66,13 @@ public class Accueil extends Fragment {
     @Override
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        globalView = view;
 
         //TODO
         accueilTask();
 
         /*-----------TODO tester, delete-----------------------*/
-        try {
+        /*try {
             String data = "{\n" +
                     "\t\"tournaments\": [{\n" +
                     "\t\t\"date\": \"2018-02-02\",\n" +
@@ -149,17 +151,23 @@ public class Accueil extends Fragment {
             result = new JSONObject(data);
         }catch (JSONException e){
             e.printStackTrace();
-        }
+        }*/
          /*---------------delete-------------------*/
+
+
+
+        //par defaut, view Tournois-drip down
+
+    }
+
+    private void updateView(){
         //parser le donnees et donner jsonArray au variable globale tournamentList
         parserResult(result);
         //afficher les <<je prete>> de tous les tournois(id = -100) par defaut
         addNewViews();
 
-
-        //par defaut, view Tournois-drip down
-        Spinner spinner = view.findViewById(R.id.spinner);
-        ArrayAdapter<TournamentItem> adapter = new ArrayAdapter<>(view.getContext(),
+        Spinner spinner = globalView.findViewById(R.id.spinner);
+        ArrayAdapter<TournamentItem> adapter = new ArrayAdapter<>(globalView.getContext(),
                 R.layout.support_simple_spinner_dropdown_item, new TournamentItem().mesPrete_tournamentItems());
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -314,6 +322,8 @@ public class Accueil extends Fragment {
                     public void onResponse(JSONObject response) {
                         Log.i(TAG, "response: " + response.toString());
                         result = response;
+                        updateView();
+
                     }
                 },
                 new Response.ErrorListener(){
