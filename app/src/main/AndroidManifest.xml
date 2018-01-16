@@ -25,10 +25,10 @@
         android:theme="@style/AppTheme">
 
         <!-- TODO <activity android:name=".Accueil"> -->
-        <activity android:name=".Login">
+        <activity android:name=".Login"
+                  android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

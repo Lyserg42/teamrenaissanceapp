@@ -1,12 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/home"
-        android:title="@string/home"/>
-    <item android:id="@+id/borrow"
-        android:title="@string/borrow" />
-    <item android:id="@+id/myloans"
-        android:title="@string/myloans"/>
-    <item android:id="@+id/profil"
-        android:title="@string/profil"/>
-
+    <item android:id="@+id/logout"
+        android:title="@string/logoutItem" />
 </menu>

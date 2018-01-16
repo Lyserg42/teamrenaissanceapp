@@ -69,6 +69,15 @@ public class Login extends AppCompatActivity {
 
     }
 
+    //Restart activity on new Intent
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
+        if ("ExitApp".equals(intent.getAction())) {
+            finish();
+        }
+    }
+
     private void connectTask(final String login, final String password){
 
         RequestQueue queue = Volley.newRequestQueue(this);

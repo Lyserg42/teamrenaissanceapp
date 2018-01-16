@@ -18,6 +18,8 @@
     <string name="passwordPlaceholder">Mot de passe</string>
     <string name="confirmPlaceholder">Confirmer</string>
     <string name="signUpButton">S\'inscrire</string>
+    <!-- Logout-->
+    <string name="logoutItem">Déconnexion</string>
     <!-- Profil edit-->
     <string name="dciPlaceholder">DCI</string>
     <string name="phonePlaceholder">Téléphone</string>
