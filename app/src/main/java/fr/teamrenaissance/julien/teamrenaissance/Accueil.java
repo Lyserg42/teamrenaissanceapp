@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
+import android.support.v4.view.ViewGroupCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,6 +52,7 @@ public class Accueil extends Fragment {
     JSONObject result;
     View globalView;
 
+
     public static Fragment newInstance(){
         Accueil fragment = new Accueil();
         return fragment;
@@ -68,95 +70,7 @@ public class Accueil extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         globalView = view;
 
-        //TODO
         accueilTask();
-
-        /*-----------TODO tester, delete-----------------------*/
-        /*try {
-            String data = "{\n" +
-                    "\t\"tournaments\": [{\n" +
-                    "\t\t\"date\": \"2018-02-02\",\n" +
-                    "\t\t\"tName\": \"PT Bilbao\",\n" +
-                    "\t\t\"demandes\": [{\n" +
-                    "\t\t\t\"uId\": 4,\n" +
-                    "\t\t\t\"cards\": [{\n" +
-                    "\t\t\t\t\"img\": \"https://img.scryfall.com/cards/normal/en/vma/4.jpg?1509841329\",\n" +
-                    "\t\t\t\t\"cName\": \"Black Lotus\",\n" +
-                    "\t\t\t\t\"qty\": 2,\n" +
-                    "\t\t\t\t\"cId\": 9299\n" +
-                    "\t\t\t}],\n" +
-                    "\t\t\t\"uName\": \"Batman\"\n" +
-                    "\t\t}],\n" +
-                    "\t\t\"tId\": 13\n" +
-                    "\t}, {\n" +
-                    "\t\t\"date\": \"2017-12-09\",\n" +
-                    "\t\t\"tName\": \"GP Madrid\",\n" +
-                    "\t\t\"demandes\": [{\n" +
-                    "\t\t\t\"uId\": 1,\n" +
-                    "\t\t\t\"cards\": [{\n" +
-                    "\t\t\t\t\"img\": \"https://img.scryfall.com/cards/normal/en/mma/212.jpg?1510050359\",\n" +
-                    "\t\t\t\t\"cName\": \"Pyrite Spellbomb\",\n" +
-                    "\t\t\t\t\"qty\": 1,\n" +
-                    "\t\t\t\t\"cId\": 11653\n" +
-                    "\t\t\t}, {\n" +
-                    "\t\t\t\t\"img\": \"https://img.scryfall.com/cards/normal/en/mm3/221.jpg?1501890996\",\n" +
-                    "\t\t\t\t\"cName\": \"Grafdigger's Cage\",\n" +
-                    "\t\t\t\t\"qty\": 1,\n" +
-                    "\t\t\t\t\"cId\": 2514\n" +
-                    "\t\t\t}, {\n" +
-                    "\t\t\t\t\"img\": \"https://img.scryfall.com/cards/normal/en/mps/19.jpg?1509844702\",\n" +
-                    "\t\t\t\t\"cName\": \"Mox Opal\",\n" +
-                    "\t\t\t\t\"qty\": 3,\n" +
-                    "\t\t\t\t\"cId\": 3792\n" +
-                    "\t\t\t}, {\n" +
-                    "\t\t\t\t\"img\": \"https://img.scryfall.com/cards/normal/en/mma/223.jpg?1510050417\",\n" +
-                    "\t\t\t\t\"cName\": \"Glimmervoid\",\n" +
-                    "\t\t\t\t\"qty\": 1,\n" +
-                    "\t\t\t\t\"cId\": 11664\n" +
-                    "\t\t\t}, {\n" +
-                    "\t\t\t\t\"img\": \"https://img.scryfall.com/cards/normal/en/plc/28.jpg?1510053147\",\n" +
-                    "\t\t\t\t\"cName\": \"Porphyry Nodes\",\n" +
-                    "\t\t\t\t\"qty\": 1,\n" +
-                    "\t\t\t\t\"cId\": 21355\n" +
-                    "\t\t\t}],\n" +
-                    "\t\t\t\"uName\": \"Lyserg\"\n" +
-                    "\t\t}, {\n" +
-                    "\t\t\t\"uId\": 3,\n" +
-                    "\t\t\t\"cards\": [{\n" +
-                    "\t\t\t\t\"img\": \"https://img.scryfall.com/cards/normal/en/mm3/50.jpg?1501890996\",\n" +
-                    "\t\t\t\t\"cName\": \"Snapcaster Mage\",\n" +
-                    "\t\t\t\t\"qty\": 2,\n" +
-                    "\t\t\t\t\"cId\": 2343\n" +
-                    "\t\t\t}],\n" +
-                    "\t\t\t\"uName\": \"Balkany\"\n" +
-                    "\t\t}, {\n" +
-                    "\t\t\t\"uId\": 4,\n" +
-                    "\t\t\t\"cards\": [{\n" +
-                    "\t\t\t\t\"img\": \"https://img.scryfall.com/cards/normal/en/mm3/221.jpg?1501890996\",\n" +
-                    "\t\t\t\t\"cName\": \"Grafdigger's Cage\",\n" +
-                    "\t\t\t\t\"qty\": 1,\n" +
-                    "\t\t\t\t\"cId\": 2514\n" +
-                    "\t\t\t}, {\n" +
-                    "\t\t\t\t\"img\": \"https://img.scryfall.com/cards/normal/en/mps/19.jpg?1509844702\",\n" +
-                    "\t\t\t\t\"cName\": \"Mox Opal\",\n" +
-                    "\t\t\t\t\"qty\": 1,\n" +
-                    "\t\t\t\t\"cId\": 3792\n" +
-                    "\t\t\t}],\n" +
-                    "\t\t\t\"uName\": \"Batman\"\n" +
-                    "\t\t}],\n" +
-                    "\t\t\"tId\": 11\n" +
-                    "\t}]\n" +
-                    "}";
-
-            result = new JSONObject(data);
-        }catch (JSONException e){
-            e.printStackTrace();
-        }*/
-         /*---------------delete-------------------*/
-
-
-
-        //par defaut, view Tournois-drip down
 
     }
 
@@ -184,23 +98,17 @@ public class Accueil extends Fragment {
     }
 
     private void newViews(List<Tournament> tournaments){
+
         int img[] = {R.drawable.edit};
         Drawable drawable= ResourcesCompat.getDrawable(getResources(), img[0], null);
         drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
 
-        LinearLayout accueil_form = getView().findViewById(R.id.accueil_form);
-        if(getView().findViewById(Integer.valueOf(1)) != null){
-            accueil_form.removeView(getView().findViewById(Integer.valueOf(1)));
-        }
-        LinearLayout new_form = new LinearLayout(getContext());
-        new_form.setOrientation(LinearLayout.VERTICAL);
-        new_form.setId(Integer.valueOf(1));
-
-        //TODO findViewById new_form;
-        //new_form.removeAllViews();
+        LinearLayout dynamique_form = getView().findViewById(R.id.dynamique_form);
+        dynamique_form.removeAllViews();
 
         for(final Tournament tournament: tournaments){
             TextView tournamentName = new TextView(getContext());
+            Log.i(TAG, tournament.gettName());
             LinearLayout.LayoutParams tnp = new LinearLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
             tnp.leftMargin = 50;
             tnp.topMargin = 30;
@@ -209,7 +117,7 @@ public class Accueil extends Fragment {
             tournamentName.setText(tournament.gettName() + " du " + tournament.getDate());
             tournamentName.setBackgroundColor(Color.LTGRAY);
 
-            new_form.addView(tournamentName);
+            dynamique_form.addView(tournamentName);
 
             for (final LoanBorrow lb : tournament.getLentCards()) {
                 TextView userName = new TextView(getContext());
@@ -218,7 +126,7 @@ public class Accueil extends Fragment {
                 userName.setLayoutParams(unp);
                 userName.setText(lb.getuName());
                 userName.setTextColor(Color.parseColor("#c8e8ff"));
-                new_form.addView(userName);
+                dynamique_form.addView(userName);
 
                 for (Card c : lb.getCards()) {
                     TextView card = new TextView(getContext());
@@ -227,7 +135,7 @@ public class Accueil extends Fragment {
                     card.setLayoutParams(cp);
 
                     card.setText(c.getQty() + " " + c.getcName());
-                    new_form.addView(card);
+                    dynamique_form.addView(card);
                 }
 
                 Button button = new Button(getContext());
@@ -249,11 +157,9 @@ public class Accueil extends Fragment {
                         dialog.show(getFragmentManager(),"dialog");
                     }
                 });
-                new_form.addView(button);
+                dynamique_form.addView(button);
             }
         }
-        accueil_form.addView(new_form);
-
     }
 
 
@@ -274,6 +180,8 @@ public class Accueil extends Fragment {
 
 
     private void parserResult(JSONObject result){
+        tournamentList.clear();
+
         try {
             JSONArray array = result.getJSONArray("tournaments");
 

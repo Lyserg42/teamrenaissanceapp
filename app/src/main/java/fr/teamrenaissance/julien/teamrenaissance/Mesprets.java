@@ -241,19 +241,8 @@ public class Mesprets extends Fragment {
         Drawable drawable= ResourcesCompat.getDrawable(getResources(), img[0], null);
         drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
 
-        // int i =1;
-        LinearLayout mesprets_form = getView().findViewById(R.id.mesprets_form);
-        if(getView().findViewById(Integer.valueOf(1)) != null){
-            mesprets_form.removeView(getView().findViewById(Integer.valueOf(1)));
-        }
-        LinearLayout new_form = new LinearLayout(getContext());
-        new_form.setOrientation(LinearLayout.VERTICAL);
-        new_form.setId(Integer.valueOf(1));
-
-        //TODO findViewById new_form;
-        //new_form.removeAllViews();
-
-        //i++;
+        LinearLayout dynamique_form = getView().findViewById(R.id.dynamique_form);
+        dynamique_form.removeAllViews();
 
         for(final Tournament tournament: tournaments){
             TextView tournamentName = new TextView(getContext());
@@ -262,12 +251,10 @@ public class Mesprets extends Fragment {
             tnp.topMargin = 30;
             tournamentName.setLayoutParams(tnp);
 
-            //tournamentName.setId(Integer.valueOf(i));
-            //i++;
             tournamentName.setText(tournament.gettName() + " du " + tournament.getDate());
             tournamentName.setBackgroundColor(Color.LTGRAY);
 
-            new_form.addView(tournamentName);
+            dynamique_form.addView(tournamentName);
 
             if("jePrete".equals(option)) {
                 for (final LoanBorrow lb : tournament.getLentCards()) {
@@ -275,8 +262,7 @@ public class Mesprets extends Fragment {
                     LinearLayout.LayoutParams unp = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
                     unp.leftMargin = 50;
                     userName.setLayoutParams(unp);
-                    //userName.setId(Integer.valueOf(i));
-                    //i++;
+
                     userName.setText(lb.getuName());
                     userName.setTextColor(Color.parseColor("#c8e8ff"));
                     userName.setCompoundDrawables(null, null, drawable, null);//set drawableRight
@@ -295,7 +281,7 @@ public class Mesprets extends Fragment {
                             dialog.show(getFragmentManager(),"dialog");//afficher dialog
                         }
                     });
-                    new_form.addView(userName);
+                    dynamique_form.addView(userName);
 
                     for (Card c : lb.getCards()) {
                         TextView card = new TextView(getContext());
@@ -304,7 +290,7 @@ public class Mesprets extends Fragment {
                         card.setLayoutParams(cp);
 
                         card.setText(c.getQty() + " " + c.getcName());
-                        new_form.addView(card);
+                        dynamique_form.addView(card);
                     }
                 }
             }else if("onMePrete".equals(option)){
@@ -313,8 +299,7 @@ public class Mesprets extends Fragment {
                     LinearLayout.LayoutParams unp = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
                     unp.leftMargin = 50;
                     userName.setLayoutParams(unp);
-                    //userName.setId(Integer.valueOf(i));
-                    //i++;
+
                     userName.setText(lb.getuName());
                     userName.setTextColor(Color.parseColor("#c8e8ff"));
                     userName.setCompoundDrawables(null, null, drawable, null);//set drawableRight
@@ -333,7 +318,7 @@ public class Mesprets extends Fragment {
                             dialog.show(getFragmentManager(),"dialog");//afficher dialog
                         }
                     });
-                    new_form.addView(userName);
+                    dynamique_form.addView(userName);
 
                     for (Card c : lb.getCards()) {
                         TextView card = new TextView(getContext());
@@ -342,18 +327,16 @@ public class Mesprets extends Fragment {
                         card.setLayoutParams(cp);
 
                         card.setText(c.getQty() + " " + c.getcName());
-                        new_form.addView(card);
+                        dynamique_form.addView(card);
                     }
                 }
             }else if("ilMeManque".equals(option)){
-                //for (Card c : tournament.getDemands()) {
                 for (int i= 0; i< tournament.getDemands().size(); i++) {
                     TextView card = new TextView(getContext());
                     LinearLayout.LayoutParams cp = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
                     cp.leftMargin = 50;
                     card.setLayoutParams(cp);
 
-                    //card.setText(c.getQty() + " " + c.getcName());
                     card.setText(tournament.getDemands().get(i).getQty() + " " + tournament.getDemands().get(i).getcName());
                     if(i== 0){
                         card.setCompoundDrawables(null, null, drawable, null);//set drawableRight
@@ -374,19 +357,19 @@ public class Mesprets extends Fragment {
                             }
                         });
                     }
-                    new_form.addView(card);
+                    dynamique_form.addView(card);
                 }
             }
 
         }
-
-        mesprets_form.addView(new_form);
 
     }
 
 
 
     private void parserResult(JSONObject result){
+        tournamentList.clear();;
+
         try {
             JSONArray array = result.getJSONArray("tournaments");
 

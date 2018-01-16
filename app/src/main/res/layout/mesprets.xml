@@ -69,6 +69,13 @@
                 android:drawableLeft="@drawable/line"/>
         </RadioGroup>
 
+        <LinearLayout
+            android:id="@+id/dynamique_form"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+        </LinearLayout>
+
     </LinearLayout>
     </ScrollView>
 </LinearLayout>
