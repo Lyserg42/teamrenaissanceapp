@@ -29,6 +29,8 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import fr.teamrenaissance.julien.teamrenaissance.utils.LoginOcclusionProblem.InputManagerHelper;
+import fr.teamrenaissance.julien.teamrenaissance.utils.LoginOcclusionProblem.KeyboardListenLayout;
 import fr.teamrenaissance.julien.teamrenaissance.utils.MyApplication;
 
 public class Login extends AppCompatActivity {
@@ -51,13 +53,17 @@ public class Login extends AppCompatActivity {
         passwordView = (EditText) findViewById(R.id.password);
         loginTest = (TextView) findViewById(R.id.loginTest);
         signInButton = (Button) findViewById(R.id.signInButton);
+
+        /*Resoudre le probleme d'occlusion des editText de "singIn"*/
+        KeyboardListenLayout keyboardListenLayout = (KeyboardListenLayout) findViewById(R.id.layout_keyboard);
+        InputManagerHelper.attachToActivity(this).bind(keyboardListenLayout, signInButton).offset(16);
+
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 connectTask(loginView.getText().toString(),passwordView.getText().toString());
             }
         });
-        //loginTest.setText("Rien");
 
         /*
          *Lorsqu'une section de texte est hyperliee, ou que nous devons cliquer sur un hyperlien

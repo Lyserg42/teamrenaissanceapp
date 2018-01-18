@@ -37,18 +37,20 @@ public class HomePage extends AppCompatActivity {
         // to display in the toolbar you must do the following:
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
+
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
     }
 
     // SHOW ITEM TO THE APP BAR
-    @Override
+    /*@Override
     public boolean onCreateOptionsMenu(android.view.Menu menu)
     {
         getMenuInflater().inflate(R.menu.mainmenu, menu);
         return true;
-    }
+    }*/
 
     //handling click events
-    @Override
+   /* @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.logout:
@@ -61,7 +63,7 @@ public class HomePage extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
+    }*/
 
     //DOUBLE CLICK TO QUIT
     long SystemTime = 0;

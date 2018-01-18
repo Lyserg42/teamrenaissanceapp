@@ -8,63 +8,13 @@
     tools:context="fr.teamrenaissance.julien.teamrenaissance.Accueil"
     android:orientation="vertical">
 
-    <!--<TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello world"/>-->
-
-    <!--
-        <android.support.v7.widget.Toolbar
-
-            android:layout_height="0dp"
-            android:layout_width="0dp"
-            android:background="@color/colomary">
-
-
-           <android.support.design.widget.TabItem
-                android:text="@string/activity_profil"/>
-
-            <android.support.design.widget.TabItem
-                android:text="@string/borrow"/>
-
-            <android.support.design.widget.TabItem
-                android:text="@string/myloans"/>
-
-            <android.support.design.widget.TabItem
-                android:text="@string/profil"/>
-
-    </android.support.v7.widget.Toolbar> -->
-    <!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <android.support.v7.widget.Toolbar
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/colorPrimary"
-            app:titleTextColor="@color/colorAccent"
-            app:title="Teamrenaissance"
-            >
-
-        </android.support.v7.widget.Toolbar>
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tab_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-        </android.support.design.widget.TabLayout>
-
-    </LinearLayout>-->
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_height="10dp"
         android:background="@color/colorPrimary"
         app:titleTextColor="@color/colorAccent"
-        app:title="Teamrenaissance"
-        >
-        <!--app:navigationIcon="@drawable/menu"-->
+        app:title="Teamrenaissance">
     </android.support.v7.widget.Toolbar>
 
     <android.support.design.widget.TabLayout
@@ -77,15 +27,12 @@
         app:tabIndicatorColor="@android:color/holo_green_light"
         app:tabIndicatorHeight="2dp"
         app:tabGravity="fill"
-        app:tabMode="fixed"
-        >
-
+        app:tabMode="fixed">
     </android.support.design.widget.TabLayout>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
     </android.support.v4.view.ViewPager>
 </android.widget.LinearLayout>

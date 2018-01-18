@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -139,6 +140,7 @@ public class Profil extends Fragment implements OnMapReadyCallback {
         mapFragment.getMapAsync(this);
 
     }
+
 
     @Override
     public void onDestroyView() {
