@@ -1,11 +1,12 @@
 <resources>
 
+    <!--<item name="colorPrimaryDark">@color/colorPrimaryDark</item>-->
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimaryDark">#000000</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
@@ -14,5 +15,7 @@
         <item name="colorAccent">#888888</item>
         <item name="colorControlNormal">#dd000000</item>
     </style>
+
+    <style name="TabLayoutTextStyle"> <item name="android:textSize">@dimen/text_16_sp</item> </style>
 
 </resources>

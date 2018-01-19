@@ -205,7 +205,7 @@ public class Profil extends Fragment implements OnMapReadyCallback {
         // Move the camera instantly to location with a zoom of 15.
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
         // Zoom in, animating the camera. ZoomTO moves the camera viewpoint to a particular zoom level(5=country,10=city, 15=street..).
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(10), 1000, null);
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(11), 1000, null);
     }
 
     private void intent(String url){
