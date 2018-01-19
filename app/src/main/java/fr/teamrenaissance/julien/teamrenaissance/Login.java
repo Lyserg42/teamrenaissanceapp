@@ -26,16 +26,22 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.CookieHandler;
+import java.net.CookieManager;
+import java.net.CookiePolicy;
+import java.net.HttpCookie;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import fr.teamrenaissance.julien.teamrenaissance.utils.LoginOcclusionProblem.InputManagerHelper;
 import fr.teamrenaissance.julien.teamrenaissance.utils.LoginOcclusionProblem.KeyboardListenLayout;
 import fr.teamrenaissance.julien.teamrenaissance.utils.MyApplication;
+import fr.teamrenaissance.julien.teamrenaissance.utils.PersistentCookieStore;
 
 public class Login extends AppCompatActivity {
 
-    MyApplication myApplication = (MyApplication) getApplication();
+    MyApplication app = (MyApplication) getApplication();
     public static final String TAG = "LoginActivity";
 
     private EditText loginView;
@@ -48,6 +54,10 @@ public class Login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        CookieHandler.setDefault(new CookieManager(new PersistentCookieStore(getApplicationContext()),CookiePolicy.ACCEPT_ALL));
+
+        checkIfConnected();
 
         loginView = (EditText) findViewById(R.id.login);
         passwordView = (EditText) findViewById(R.id.password);
@@ -84,40 +94,27 @@ public class Login extends AppCompatActivity {
         }
     }
 
+    private void launchHomePage(){
+        List<HttpCookie> cookies = ((CookieManager)CookieHandler.getDefault()).getCookieStore().getCookies();
+
+        String[] cookieArray = new String[cookies.size()];
+        //copy your List of Strings into the Array
+        int i=0;
+        for(HttpCookie c : cookies ){
+            cookieArray[i]=c.toString();
+            i++;
+        }
+
+        Intent intent = new Intent(getApplicationContext(), HomePage.class);
+        intent.putExtra("cookieArray",cookieArray);
+        startActivity(intent);
+    }
+
     private void connectTask(final String login, final String password){
 
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = "https://www.teamrenaissance.fr/user";
-        /*JSONObject dataJSON = new JSONObject();
-        try {
-            dataJSON.put("typeRequest","connexion");
-            dataJSON.put("login",login);
-            dataJSON.put("password",password);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
 
-        JsonObjectRequest request = new JsonObjectRequest(
-                Request.Method.POST,
-                url,
-                dataJSON,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.i(TAG, "response: " + response.toString());
-                        loginTest.setText("Connexion reussie");
-                    }
-                },
-                new Response.ErrorListener(){
-                    @Override
-                    public void onErrorResponse(VolleyError error){
-                        Log.i(TAG, "error with: " + error.getMessage());
-                        if (error.networkResponse != null)
-                            Log.i(TAG, "status code: " + error.networkResponse.statusCode);
-                        loginTest.setText("Echec connexion");
-                    }
-                }
-        );*/
         StringRequest request = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>()
                 {
@@ -132,12 +129,11 @@ public class Login extends AppCompatActivity {
                             //myApplication.setUserID("");...
                             //TODO: redirect to ...
                            //TODO Julien
-                            updateInfosProfil();
+                            checkIfConnected();
                             MyApplication profil = (MyApplication) getApplication();
                             loginTest.setText(profil.getFirstName());
+                            launchHomePage();
 
-                            Intent intent = new Intent(getApplicationContext(), HomePage.class);
-                            startActivity(intent);
                         }
 
                     }
@@ -199,12 +195,14 @@ public class Login extends AppCompatActivity {
         return spannableString;
     }
 
-    public void updateInfosProfil(){
+    public void checkIfConnected(){
+        boolean isConnected = false;
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = "https://www.teamrenaissance.fr/user";
         JSONObject dataJSON = new JSONObject();
         try {
             dataJSON.put("typeRequest","getUser");
+            dataJSON.put("uName","");
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -216,25 +214,8 @@ public class Login extends AppCompatActivity {
                 {
                     @Override
                     public void onResponse(JSONObject response) {
-                        MyApplication profil = (MyApplication) getApplication();
-                        try {
-                            profil.setAddress(response.get("uName").toString());
-                            profil.setAddress(response.get("firstName").toString());
-                            profil.setAddress(response.get("lastName").toString());
-                            profil.setAddress(response.get("phone").toString());
-                            profil.setAddress(response.get("DCI").toString());
-                            profil.setAddress(response.get("address").toString());
-                            profil.setAddress(response.get("zipCode").toString());
-                            profil.setAddress(response.get("city").toString());
-                            profil.setAddress(response.get("facebook").toString());
-                            profil.setAddress(response.get("twitter").toString());
-                            profil.setAddress(response.get("email").toString());
-                            profil.setAddress(response.get("avatar").toString());
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
+                        Log.i(TAG,"Response getUser: "+response);
+                        launchHomePage();
                     }
                 },
                 new Response.ErrorListener()

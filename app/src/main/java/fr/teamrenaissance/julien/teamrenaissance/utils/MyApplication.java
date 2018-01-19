@@ -1,6 +1,7 @@
 package fr.teamrenaissance.julien.teamrenaissance.utils;
 
 import android.app.Application;
+import java.net.CookieManager;
 
 //MyApplication inherits the application, is a global variable in Android. No matter which activity
 //to jump to, you can directly call the relevant information.
@@ -19,6 +20,8 @@ public class MyApplication extends Application{
     private String twitter;
     private String email;
     private String avatar;
+
+    private CookieManager cookieManager = null;
 
     public MyApplication() {
     }
@@ -144,6 +147,11 @@ public class MyApplication extends Application{
     public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
+
+    public CookieManager getCookieManager() {  return cookieManager; }
+
+    public void setCookieManager(CookieManager cookieManager) { this.cookieManager = cookieManager; }
+
 
 
 }

@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +17,20 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Network;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.BasicNetwork;
+import com.android.volley.toolbox.HttpClientStack;
+import com.android.volley.toolbox.HttpStack;
+import com.android.volley.toolbox.HurlStack;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -28,13 +43,22 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.CookieManager;
+import java.net.CookieHandler;
+import java.net.CookiePolicy;
+import java.net.CookieStore;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import fr.teamrenaissance.julien.teamrenaissance.utils.CircleImageView;
 import fr.teamrenaissance.julien.teamrenaissance.utils.GetLatLongByURL;
 import fr.teamrenaissance.julien.teamrenaissance.utils.MyApplication;
+import fr.teamrenaissance.julien.teamrenaissance.utils.PersistentCookieStore;
 
 public class Profil extends Fragment implements OnMapReadyCallback {
+
+    public static final String TAG = "Profil";
 
     private CircleImageView avatar;
     private TextView pseudo;
@@ -71,7 +95,8 @@ public class Profil extends Fragment implements OnMapReadyCallback {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        final MyApplication myApplication = (MyApplication) getActivity().getApplication();
+
+        Log.i(TAG,"Cookies : "+((CookieManager) CookieHandler.getDefault()).getCookieStore().getCookies());
 
         avatar = (CircleImageView) view.findViewById(R.id.avatar);
         pseudo = (TextView) view.findViewById(R.id.pseudo);
@@ -84,6 +109,7 @@ public class Profil extends Fragment implements OnMapReadyCallback {
         twitter = (ImageView) view.findViewById(R.id.tw);
         edit = (ImageView) view.findViewById(R.id.edit);
 
+        getProfilTask();
 
         /*TODO
         int id = getResources().getIdentifier("lyserg", "drawable", getContext().getPackageName());
@@ -206,6 +232,67 @@ public class Profil extends Fragment implements OnMapReadyCallback {
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
         // Zoom in, animating the camera. ZoomTO moves the camera viewpoint to a particular zoom level(5=country,10=city, 15=street..).
         mMap.animateCamera(CameraUpdateFactory.zoomTo(11), 1000, null);
+    }
+
+    private void getProfilTask(){
+
+       /* DefaultHttpClient httpclient = new DefaultHttpClient();
+
+        CookieStore cookieStore = ((CookieManager)CookieHandler.getDefault()).getCookieStore();
+        httpclient.setCookieStore( cookieStore );
+
+        HttpStack httpStack = new HttpClientStack( httpclient );*/
+        RequestQueue queue = Volley.newRequestQueue(getContext()/*, httpStack*/  );
+
+        String url = "https://teamrenaissance.fr/user";
+
+        try {
+            JSONObject dataJson = new JSONObject("{typeRequest:\"getUser\", uName:\"\"}");
+
+            Log.i(TAG, "Cookies :  " + ((CookieManager)CookieHandler.getDefault()).getCookieStore().getCookies().toString() );
+
+            final JsonObjectRequest request = new JsonObjectRequest(
+                    Request.Method.POST,
+                    url,
+                    dataJson,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            Log.i(TAG, "response : " + response.toString());
+
+                        }
+                    },
+                    new Response.ErrorListener(){
+                        @Override
+                        public void onErrorResponse(VolleyError error){
+                            Log.i(TAG, "error with: " + error.getMessage());
+                            if (error.networkResponse != null)
+                                Log.i(TAG, "status code : " + error.networkResponse.statusCode);
+                        }
+                    }
+            ) /*{
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    HashMap<String, String> headers = new HashMap<>();
+                    headers.put("Cookie",((CookieManager)CookieHandler.getDefault()).getCookieStore().getCookies().toString());
+                    return headers;
+                }
+            }*/;
+
+            request.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+            request.setTag("POST");
+
+            /*try {
+                Log.i(TAG,"HEADERS : "+request.getHeaders().toString());
+            } catch (AuthFailureError authFailureError) {
+                authFailureError.printStackTrace();
+            }*/
+            queue.add(request);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private void intent(String url){

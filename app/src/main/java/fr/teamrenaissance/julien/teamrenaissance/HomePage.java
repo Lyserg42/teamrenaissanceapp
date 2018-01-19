@@ -14,11 +14,17 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import java.net.CookieHandler;
+import java.net.CookieManager;
+import java.net.CookiePolicy;
+import java.net.HttpCookie;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import fr.teamrenaissance.julien.teamrenaissance.utils.MyFragmentAdapter;
+import fr.teamrenaissance.julien.teamrenaissance.utils.PersistentCookieStore;
 
 public class HomePage extends AppCompatActivity {
     public static final String TAG = "HomeActivity";
@@ -32,6 +38,16 @@ public class HomePage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homepage);
         initView();
+
+        PersistentCookieStore cookieStore = new PersistentCookieStore(this);
+
+      /*  String[] cookieArray = getIntent().getStringArrayExtra("cookieArray");
+        for(int i=0;i<cookieArray.length;i++)
+        {
+            HttpCookie cookie = new HttpCookie(cookieArray[i].split("=")[0], cookieArray[i].split("=")[1]);
+            cookieStore.add(URI.create(""), cookie);
+        } */
+
 
         //In the latest versions of Android when using the compat library for toolbar,in order to get the menu items
         // to display in the toolbar you must do the following:
