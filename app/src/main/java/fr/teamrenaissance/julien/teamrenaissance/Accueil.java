@@ -1,6 +1,5 @@
 package fr.teamrenaissance.julien.teamrenaissance;
 
-
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -8,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
-import android.support.v4.view.ViewGroupCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
@@ -28,6 +27,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,6 +41,7 @@ import fr.teamrenaissance.julien.teamrenaissance.beans.Dialog;
 import fr.teamrenaissance.julien.teamrenaissance.beans.LoanBorrow;
 import fr.teamrenaissance.julien.teamrenaissance.beans.Tournament;
 import fr.teamrenaissance.julien.teamrenaissance.utils.DialogFragmentHelper;
+import fr.teamrenaissance.julien.teamrenaissance.utils.NumImageView;
 import fr.teamrenaissance.julien.teamrenaissance.utils.TournamentItem;
 
 public class Accueil extends Fragment {
@@ -128,14 +129,26 @@ public class Accueil extends Fragment {
                 userName.setTextColor(Color.parseColor("#c8e8ff"));
                 dynamique_form.addView(userName);
 
+                int id = 11;
                 for (Card c : lb.getCards()) {
-                    TextView card = new TextView(getContext());
+                    /*TextView card = new TextView(getContext());
                     LinearLayout.LayoutParams cp = new LinearLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
                     cp.leftMargin = 50;
                     card.setLayoutParams(cp);
 
                     card.setText(c.getQty() + " " + c.getcName());
+                    dynamique_form.addView(card);*/
+
+                    //ImageView card = new ImageView(getContext());
+                    NumImageView card = new NumImageView(getContext());
+                    card.setId(Integer.valueOf(id));
+                    card.setNum(c.getQty());
+                    LinearLayout.LayoutParams cp = new LinearLayout.LayoutParams(250, 250);
+                    cp.leftMargin = 50;
+                    card.setLayoutParams(cp);
                     dynamique_form.addView(card);
+                    Glide.with(this).load(c.getImg()).into(card);
+                    id++;
                 }
 
                 Button button = new Button(getContext());
@@ -203,6 +216,7 @@ public class Accueil extends Fragment {
                         c2.setcId((array.getJSONObject(i).getJSONArray("demandes").getJSONObject(l).getJSONArray("cards")).getJSONObject(lc).getInt("cId"));
                         c2.setcName((array.getJSONObject(i).getJSONArray("demandes").getJSONObject(l).getJSONArray("cards")).getJSONObject(lc).getString("cName"));
                         c2.setQty((array.getJSONObject(i).getJSONArray("demandes").getJSONObject(l).getJSONArray("cards")).getJSONObject(lc).getInt("qty"));
+                        c2.setImg((array.getJSONObject(i).getJSONArray("demandes").getJSONObject(l).getJSONArray("cards")).getJSONObject(lc).getString("img"));
                         lentCards.add(c2);
                     }
                     lent.setCards(lentCards);
