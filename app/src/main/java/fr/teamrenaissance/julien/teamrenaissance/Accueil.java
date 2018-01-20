@@ -11,9 +11,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -41,6 +43,7 @@ import fr.teamrenaissance.julien.teamrenaissance.beans.Dialog;
 import fr.teamrenaissance.julien.teamrenaissance.beans.LoanBorrow;
 import fr.teamrenaissance.julien.teamrenaissance.beans.Tournament;
 import fr.teamrenaissance.julien.teamrenaissance.utils.DialogFragmentHelper;
+import fr.teamrenaissance.julien.teamrenaissance.utils.ImageAdapter;
 import fr.teamrenaissance.julien.teamrenaissance.utils.NumImageView;
 import fr.teamrenaissance.julien.teamrenaissance.utils.TournamentItem;
 
@@ -52,7 +55,8 @@ public class Accueil extends Fragment {
     List<Tournament> tournamentList = new ArrayList<>();
     JSONObject result;
     View globalView;
-
+    //TODO mettre en variable global pour l'application, les autres pages doient changer aussi
+    int type;
 
     public static Fragment newInstance(){
         Accueil fragment = new Accueil();
@@ -70,6 +74,24 @@ public class Accueil extends Fragment {
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         globalView = view;
+
+        type =1;
+        final TextView textView = view.findViewById(R.id.type);
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO optimiser
+                if(type == 2){
+                    textView.setText("en texte");
+                    type = 1;
+                    accueilTask();
+                }else {
+                    type = 2;
+                    textView.setText("en image");
+                    accueilTask();
+                }
+            }
+        });
 
         accueilTask();
 
@@ -110,7 +132,7 @@ public class Accueil extends Fragment {
         for(final Tournament tournament: tournaments){
             TextView tournamentName = new TextView(getContext());
             Log.i(TAG, tournament.gettName());
-            LinearLayout.LayoutParams tnp = new LinearLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+            LinearLayout.LayoutParams tnp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
             tnp.leftMargin = 50;
             tnp.topMargin = 30;
             tournamentName.setLayoutParams(tnp);
@@ -122,33 +144,32 @@ public class Accueil extends Fragment {
 
             for (final LoanBorrow lb : tournament.getLentCards()) {
                 TextView userName = new TextView(getContext());
-                LinearLayout.LayoutParams unp = new LinearLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                LinearLayout.LayoutParams unp = new LinearLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
                 unp.leftMargin = 50;
                 userName.setLayoutParams(unp);
                 userName.setText(lb.getuName());
                 userName.setTextColor(Color.parseColor("#c8e8ff"));
                 dynamique_form.addView(userName);
 
-                int id = 11;
-                for (Card c : lb.getCards()) {
-                    /*TextView card = new TextView(getContext());
-                    LinearLayout.LayoutParams cp = new LinearLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-                    cp.leftMargin = 50;
-                    card.setLayoutParams(cp);
+                if(type == 2) {//text
+                    int id = 11;
+                    for (Card c : lb.getCards()) {
+                        TextView card = new TextView(getContext());
+                        LinearLayout.LayoutParams cp = new LinearLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                        cp.leftMargin = 50;
+                        card.setLayoutParams(cp);
 
-                    card.setText(c.getQty() + " " + c.getcName());
-                    dynamique_form.addView(card);*/
-
-                    //ImageView card = new ImageView(getContext());
-                    NumImageView card = new NumImageView(getContext());
-                    card.setId(Integer.valueOf(id));
-                    card.setNum(c.getQty());
-                    LinearLayout.LayoutParams cp = new LinearLayout.LayoutParams(250, 250);
-                    cp.leftMargin = 50;
-                    card.setLayoutParams(cp);
-                    dynamique_form.addView(card);
-                    Glide.with(this).load(c.getImg()).into(card);
-                    id++;
+                        card.setText(c.getQty() + " " + c.getcName());
+                        dynamique_form.addView(card);
+                    }
+                }else if(type == 1) {
+                    GridView gridView = new GridView(getContext());
+                    gridView.setNumColumns(4);
+                    GridView.LayoutParams glp = new GridView.LayoutParams(GridView.LayoutParams.MATCH_PARENT, GridView.LayoutParams.MATCH_PARENT);
+                    gridView.setLayoutParams(glp);
+                    ImageAdapter imageAdapter = new ImageAdapter(getContext(), lb.getCards());
+                    gridView.setAdapter(imageAdapter);
+                    dynamique_form.addView(gridView);
                 }
 
                 Button button = new Button(getContext());

@@ -7,32 +7,34 @@
     android:orientation="vertical"
     tools:context="fr.teamrenaissance.julien.teamrenaissance.Accueil">
 
-    <ScrollView
+    <TextView
+        android:id="@+id/type"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorPrimaryDark"
+        android:text="en text"
+        android:gravity="right"
+        android:paddingRight="15dp"/>
+
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="15dp">
+    </Spinner>
+
+    <fr.teamrenaissance.julien.teamrenaissance.utils.BaseScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
 
         <LinearLayout
-            android:id="@+id/accueil_form"
+            android:id="@+id/dynamique_form"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <Spinner
-                android:id="@+id/spinner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:layout_marginTop="15dp"
-                android:layout_marginLeft="15dp">
-            </Spinner>
-
-            <LinearLayout
-                android:id="@+id/dynamique_form"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-            </LinearLayout>
-
         </LinearLayout>
-    </ScrollView>
+    </fr.teamrenaissance.julien.teamrenaissance.utils.BaseScrollView>
 </LinearLayout>
