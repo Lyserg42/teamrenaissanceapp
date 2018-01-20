@@ -15,8 +15,9 @@
     <string name="lastNamePlaceholder">Nom</string>
     <string name="firstNamePlaceholder">Prénom</string>
     <string name="emailPlaceholder">E-mail</string>
-    <string name="passwordPlaceholder">Mot de passe</string>
+    <string name="newPasswordPlaceholder">Nouveau mot de passe</string>
     <string name="confirmPlaceholder">Confirmer</string>
+    <string name="currentPasswordPlaceholder">Mot de passe actuel</string>
     <string name="signUpButton">S\'inscrire</string>
     <!-- Logout-->
     <string name="logoutItem">Déconnexion</string>
@@ -39,7 +40,7 @@
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_empty_password">Password cannot be empty</string>
     <string name="error_invalid_password">This password is too short</string>
-    <string name="error_invalid_confirmPassword">The password and it\'s confirm are not the same</string>
+    <string name="error_invalid_confirmPassword">The password and the confirmation are differents</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email

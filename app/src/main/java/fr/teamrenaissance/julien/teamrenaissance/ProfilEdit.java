@@ -1,5 +1,6 @@
 package fr.teamrenaissance.julien.teamrenaissance;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -10,9 +11,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -20,17 +24,22 @@ import com.android.volley.Response;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import fr.teamrenaissance.julien.teamrenaissance.utils.MyApplication;
+import java.util.HashMap;
+import java.util.Map;
+
+import fr.teamrenaissance.julien.teamrenaissance.beans.User;
 
 public class ProfilEdit extends AppCompatActivity {
 
     public static final String TAG = "ProfilEditActivity";
 
+    private User user = new User();
+
     private TextView pseudoView;
     private EditText lastNameView;
     private EditText firstNameView;
-    private EditText dciView;
     private EditText phoneView;
+    private EditText dciView;
     private EditText addressView;
     private EditText zipcodeView;
     private EditText cityView;
@@ -38,8 +47,9 @@ public class ProfilEdit extends AppCompatActivity {
     private EditText facebookView;
     private EditText twitterView;
     private EditText avatarView;
-    private EditText passwordView;
+    private EditText newPasswordView;
     private EditText confirmView;
+    private EditText currentPasswordView;
     private Button valideButton;
 
     View focusView = null;
@@ -49,77 +59,22 @@ public class ProfilEdit extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profiledit);
 
-        final MyApplication myApplication = (MyApplication) getApplication();
 
         pseudoView = (TextView) findViewById(R.id.pseudo);
-        //TODO null or isEmpty???
-        if(null != myApplication.getuName() || !TextUtils.isEmpty(myApplication.getuName())){
-            pseudoView.setText(myApplication.getuName());
-        }
-
         lastNameView = (EditText) findViewById(R.id.lastName);
-        if(null != myApplication.getLastName()){
-            lastNameView.setText(myApplication.getLastName());
-        }
-
         firstNameView = (EditText) findViewById(R.id.firstName);
-        if(null != myApplication.getFirstName()){
-            firstNameView.setText(myApplication.getFirstName());
-        }
-
         dciView = (EditText) findViewById(R.id.dci);
-        if(null != myApplication.getDCI()){
-            dciView.setText(myApplication.getDCI());
-        }
-
         phoneView = (EditText) findViewById(R.id.phone);
-        if(null != myApplication.getPhone()){
-            phoneView.setText(myApplication.getPhone());
-        }
-
         addressView = (EditText) findViewById(R.id.address);
-        if(null != myApplication.getAddress()){
-            avatarView.setText(myApplication.getAddress());
-        }
-
         zipcodeView = (EditText) findViewById(R.id.zipcode);
-        if(null != myApplication.getZipCode()){
-            zipcodeView.setText(myApplication.getZipCode());
-        }
-
         cityView = (EditText) findViewById(R.id.city);
-        if(null != myApplication.getCity()){
-            cityView.setText(myApplication.getCity());
-        }
-
         emailView = (AutoCompleteTextView) findViewById(R.id.email);
-        if(null != myApplication.getEmail()){
-            emailView.setText(myApplication.getEmail());
-        }
-
         facebookView = (EditText) findViewById(R.id.fb);
-        if(null != myApplication.getFacebook()){
-            facebookView.setText(myApplication.getFacebook());
-        }
-
         twitterView = (EditText) findViewById(R.id.tw);
-        if(null != myApplication.getTwitter()){
-            twitterView.setText(myApplication.getTwitter());
-        }
-
         avatarView = (EditText) findViewById(R.id.avatar);
-        if(null != myApplication.getAvatar()){
-            avatarView.setText(myApplication.getAvatar());
-        }
-
-        passwordView = (EditText) findViewById(R.id.password);
+        newPasswordView = (EditText) findViewById(R.id.newPassword);
         confirmView = (EditText) findViewById(R.id.confirm);
-        /*TODO
-        if(null != myApplication.getPassword()){
-            passwordView.setText(myApplication.getPassword());
-            confirmView.setText(myApplication.getPassword());
-        }*/
-
+        currentPasswordView = (EditText) findViewById(R.id.currentPassword);
 
         valideButton = (Button) findViewById(R.id.valideButton);
         valideButton.setOnClickListener(new View.OnClickListener() {
@@ -128,30 +83,111 @@ public class ProfilEdit extends AppCompatActivity {
                 valideProfilTask();
             }
         });
+
+        getUserProfil();
+
+    }
+
+    private void getUserProfil(){
+        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+        String url = "https://www.teamrenaissance.fr/user";
+        JSONObject dataJSON = new JSONObject();
+        try {
+            dataJSON.put("typeRequest","getUser");
+            dataJSON.put("uName","");
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, dataJSON,
+                new Response.Listener<JSONObject>()
+                {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.i(TAG,"Response getUser ProfilEdit: "+response);
+                        parserResponse(response);
+                        syncProfil();
+                    }
+                },
+                new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error)
+                    {
+                        Log.i(TAG, "error with: " + error.getMessage());
+                        if (error.networkResponse != null)
+                            Log.i(TAG, "status code: " + error.networkResponse.statusCode);
+                    }
+                });
+
+        request.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        request.setTag("POST");
+        queue.add(request);
+    }
+
+    public void parserResponse(JSONObject result){
+        try {
+            user.setuName(result.getString("uName"));
+            user.setuId(result.getString("uId"));
+            user.setFirstName(result.getString("firstName"));
+            user.setLastName(result.getString("lastName"));
+            user.setPhone(result.getString("phone"));
+            user.setDCI(result.getString("DCI"));
+            user.setAddress(result.getString("address"));
+            user.setZipCode(result.getString("zipCode"));
+            user.setCity(result.getString("city"));
+            user.setFacebook(result.getString("facebook"));
+            user.setTwitter(result.getString("twitter"));
+            user.setEmail(result.getString("email"));
+            user.setAvatar(result.getString("avatar"));
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void syncProfil(){
+
+        pseudoView.setText(user.getuName());
+        lastNameView.setText(user.getLastName());
+        firstNameView.setText(user.getFirstName());
+        phoneView.setText(user.getPhone());
+        dciView.setText(user.getDCI());
+        addressView.setText(user.getAddress());
+        zipcodeView.setText(user.getZipCode());
+        cityView.setText(user.getCity());
+        emailView.setText(user.getEmail());
+        facebookView.setText(user.getFacebook());
+        twitterView.setText(user.getTwitter());
+        avatarView.setText(user.getAvatar());
     }
 
     //TODO statu code 400
     private void valideProfilTask(){
         emailView.setError(null);
-        passwordView.setError(null);
+        newPasswordView.setError(null);
         confirmView.setError(null);
         String email = emailView.getText().toString();
-        String password = passwordView.getText().toString();
+        String newPassword = newPasswordView.getText().toString();
         String pwConfirm = confirmView.getText().toString();
+        String currentPassword = currentPasswordView.getText().toString();
 
         boolean cancel = false;
 
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
-            passwordView.setError(getString(R.string.error_invalid_password));
-            focusView = passwordView;
+        if (!TextUtils.isEmpty(newPassword) && !isPasswordValid(newPassword)) {
+            newPasswordView.setError(getString(R.string.error_invalid_password));
+            focusView = newPasswordView;
             cancel = true;
         }
-        if( TextUtils.isEmpty(password)){
-            passwordView.setError(getString(R.string.error_empty_password));
-            focusView = passwordView;
+        if( TextUtils.isEmpty(currentPassword)){
+            currentPasswordView.setError(getString(R.string.error_empty_password));
+            focusView = currentPasswordView;
             cancel = true;
         }
-        if (TextUtils.isEmpty(pwConfirm) || (!TextUtils.isEmpty(pwConfirm) && !isPwConfirmValid(password, pwConfirm))) {
+        if (!newPassword.equals(pwConfirm)) {
             confirmView.setError(getString(R.string.error_invalid_confirmPassword));
             focusView = confirmView;
             cancel = true;
@@ -173,35 +209,16 @@ public class ProfilEdit extends AppCompatActivity {
             RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
             String url = "https://www.teamrenaissance.fr/user";
 
-            JSONObject dataJSON = new JSONObject();
-            try {
-                dataJSON.put("typeRequest","setUserProfil");
-                dataJSON.put("name", lastNameView.getText());
-                dataJSON.put("firstName", firstNameView.getText());
-                //dataJSON.put("email", (!TextUtils.isEmpty(emailView.getText()))? emailView.getText().toString(): "");
-                dataJSON.put("email", emailView.getText());
-                dataJSON.put("address", addressView.getText());
-                dataJSON.put("zipCode", zipcodeView.getText());
-                dataJSON.put("city", cityView.getText());
-                dataJSON.put("avatar", avatarView.getText());
-                dataJSON.put("phoneNumber", phoneView.getText());
-                dataJSON.put("dciNumber", dciView.getText());
-                dataJSON.put("facebook", facebookView.getText());
-                dataJSON.put("twitter", twitterView.getText());
-                dataJSON.put("password", passwordView.getText());
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            System.out.println("--------------------dataJSON="+ dataJSON.toString());
-            JsonObjectRequest request = new JsonObjectRequest(
+            StringRequest request = new StringRequest(
                     Request.Method.POST,
                     url,
-                    dataJSON,
-                    new Response.Listener<JSONObject>() {
+                    new Response.Listener<String>() {
                         @Override
-                        public void onResponse(JSONObject response) {
-                            Log.i(TAG, "response: " + response.toString());
+                        public void onResponse(String response) {
+                            Log.i(TAG, "response: " + response);
+                            Intent intent = new Intent(getApplicationContext(), HomePage.class);
+                            startActivity(intent);
+
                         }
                     },
                     new Response.ErrorListener(){
@@ -212,7 +229,44 @@ public class ProfilEdit extends AppCompatActivity {
                                 Log.i(TAG, "status code: " + error.networkResponse.statusCode);
                         }
                     }
-            );
+            )
+            {
+                @Override
+                public Map<String, String> getHeaders()  {
+                    HashMap<String, String> header = new HashMap<String, String>();
+                    header.put("Content-Type","application/json");
+                    return header;
+                }
+
+                @Override
+                public byte[] getBody()
+                {
+                    JSONObject body = new JSONObject();
+                    try {
+                        body.put("typeRequest","setUserProfil");
+                        body.put("name", lastNameView.getText());
+                        body.put("firstName", firstNameView.getText());
+                        body.put("email", emailView.getText());
+                        body.put("address", addressView.getText());
+                        body.put("zipCode", zipcodeView.getText());
+                        body.put("city", cityView.getText());
+                        body.put("avatar", avatarView.getText());
+                        body.put("phoneNumber", phoneView.getText());
+                        body.put("dciNumber", dciView.getText());
+                        body.put("facebook", facebookView.getText());
+                        body.put("twitter", twitterView.getText());
+                        body.put("discord", "discord");
+                        if(!TextUtils.isEmpty(newPasswordView.getText().toString())){
+                            body.put("newPassword", newPasswordView.getText());
+                        }
+                        body.put("password", currentPasswordView.getText());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    return body.toString().getBytes();
+                }
+            };
 
             queue.add(request);
         }

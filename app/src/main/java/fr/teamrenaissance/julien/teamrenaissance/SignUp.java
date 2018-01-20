@@ -1,10 +1,7 @@
 package fr.teamrenaissance.julien.teamrenaissance;
 
 import android.content.Intent;
-import android.content.Loader;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.app.LoaderManager.LoaderCallbacks;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -48,7 +45,7 @@ public class SignUp extends AppCompatActivity {
         lastNameView = (EditText) findViewById(R.id.lastName);
         firstNameView = (EditText) findViewById(R.id.firstName);
         emailView = (AutoCompleteTextView) findViewById(R.id.email);
-        passwordView = (EditText) findViewById(R.id.password);
+        passwordView = (EditText) findViewById(R.id.newPassword);
         confirmView = (EditText) findViewById(R.id.confirm);
 
         signUpButton = (Button) findViewById(R.id.signUpButton);

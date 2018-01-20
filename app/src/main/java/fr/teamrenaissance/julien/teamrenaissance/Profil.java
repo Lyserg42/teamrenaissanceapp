@@ -12,24 +12,16 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.Network;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.BasicNetwork;
-import com.android.volley.toolbox.HttpClientStack;
-import com.android.volley.toolbox.HttpStack;
-import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -45,18 +37,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.CookieManager;
-import java.net.CookieHandler;
-import java.net.CookiePolicy;
-import java.net.CookieStore;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
+import fr.teamrenaissance.julien.teamrenaissance.beans.User;
 import fr.teamrenaissance.julien.teamrenaissance.utils.CircleImageView;
 import fr.teamrenaissance.julien.teamrenaissance.utils.GetLatLongByURL;
-import fr.teamrenaissance.julien.teamrenaissance.utils.MyApplication;
-import fr.teamrenaissance.julien.teamrenaissance.utils.PersistentCookieStore;
 
 public class Profil extends Fragment implements OnMapReadyCallback {
 
@@ -73,6 +58,8 @@ public class Profil extends Fragment implements OnMapReadyCallback {
     private ImageView twitter;
     private ImageView edit;
     private ImageView logout;
+
+    private User user = new User();
 
     private SupportMapFragment mapFragment;
     private GoogleMap mMap;
@@ -99,8 +86,6 @@ public class Profil extends Fragment implements OnMapReadyCallback {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Log.i(TAG,"Cookies : "+((CookieManager) CookieHandler.getDefault()).getCookieStore().getCookies());
-
         avatar = (CircleImageView) view.findViewById(R.id.avatar);
         pseudo = (TextView) view.findViewById(R.id.pseudo);
         name = (TextView) view.findViewById(R.id.name);
@@ -121,37 +106,7 @@ public class Profil extends Fragment implements OnMapReadyCallback {
         avatar.setImageResource(id);*/
         avatar.setImageResource(R.drawable.lyserg);
 
-        /* TODO
-        pseudo.setText(myApplication.getUsername());
-        name.setText(myApplication.getName());
-        phone.setText(myApplication.getPhoneNumber());
-        dci.setText(myApplication.getDciNumber());
-        home.setText(myApplication.getAddress()+ ", "+ myApplication.getZipCode()+ " "+ myApplication.getCity());
-        email.setText(myApplication.getEmail());*/
-        pseudo.setText("Lyserg");
-        name.setText("Julien Henry");
-        phone.setText("06 71 77 86 63");
-        dci.setText("3213675748");
-        home.setText("39 Avenue du Président Wilson, 94230 Cachan");
-        email.setText("julien.henry@gmx.com");
 
-        facebook.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                /*TODO
-                intent(myApplication.getFacebook()); */
-                intent("https://www.facebook.com/julien.henry404");
-
-            }
-        });
-        twitter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                /*TODO
-                intent(myApplication.getTwitter());*/
-                intent("https://twitter.com/lyserg42?lang=fr");
-            }
-        });
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -249,73 +204,101 @@ public class Profil extends Fragment implements OnMapReadyCallback {
         mMap.animateCamera(CameraUpdateFactory.zoomTo(11), 1000, null);
     }
 
-    private void getProfilTask(){
-
-       /* DefaultHttpClient httpclient = new DefaultHttpClient();
-
-        CookieStore cookieStore = ((CookieManager)CookieHandler.getDefault()).getCookieStore();
-        httpclient.setCookieStore( cookieStore );
-
-        HttpStack httpStack = new HttpClientStack( httpclient );*/
-        RequestQueue queue = Volley.newRequestQueue(getContext()/*, httpStack*/  );
-
-        String url = "https://teamrenaissance.fr/user";
-
-        try {
-            JSONObject dataJson = new JSONObject("{typeRequest:\"getUser\", uName:\"\"}");
-
-            Log.i(TAG, "Cookies :  " + ((CookieManager)CookieHandler.getDefault()).getCookieStore().getCookies().toString() );
-
-            final JsonObjectRequest request = new JsonObjectRequest(
-                    Request.Method.POST,
-                    url,
-                    dataJson,
-                    new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            Log.i(TAG, "response : " + response.toString());
-
-                        }
-                    },
-                    new Response.ErrorListener(){
-                        @Override
-                        public void onErrorResponse(VolleyError error){
-                            Log.i(TAG, "error with: " + error.getMessage());
-                            if (error.networkResponse != null)
-                                Log.i(TAG, "status code : " + error.networkResponse.statusCode);
-                        }
-                    }
-            ) /*{
-                @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
-                    HashMap<String, String> headers = new HashMap<>();
-                    headers.put("Cookie",((CookieManager)CookieHandler.getDefault()).getCookieStore().getCookies().toString());
-                    return headers;
-                }
-            }*/;
-
-            request.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-            request.setTag("POST");
-
-            /*try {
-                Log.i(TAG,"HEADERS : "+request.getHeaders().toString());
-            } catch (AuthFailureError authFailureError) {
-                authFailureError.printStackTrace();
-            }*/
-            queue.add(request);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
     private void intent(String url){
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_VIEW);
         intent.addCategory(Intent.CATEGORY_BROWSABLE);
         intent.setData(Uri.parse(url));
         startActivity(intent);
+    }
+
+    public void parserResponse(JSONObject result){
+        try {
+            user.setuName(result.getString("uName"));
+            user.setuId(result.getString("uId"));
+            user.setFirstName(result.getString("firstName"));
+            user.setLastName(result.getString("lastName"));
+            user.setPhone(result.getString("phone"));
+            user.setDCI(result.getString("DCI"));
+            user.setAddress(result.getString("address"));
+            user.setZipCode(result.getString("zipCode"));
+            user.setCity(result.getString("city"));
+            user.setFacebook(result.getString("facebook"));
+            user.setTwitter(result.getString("twitter"));
+            user.setEmail(result.getString("email"));
+            user.setAvatar(result.getString("avatar"));
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void getProfilTask(){
+        RequestQueue queue = Volley.newRequestQueue(getActivity().getApplicationContext());
+        String url = "https://www.teamrenaissance.fr/user";
+        JSONObject dataJSON = new JSONObject();
+        try {
+            dataJSON.put("typeRequest","getUser");
+            dataJSON.put("uName","");
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, dataJSON,
+                new Response.Listener<JSONObject>()
+                {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.i(TAG,"Response getUser Profil: "+response);
+                        parserResponse(response);
+                        syncProfil();
+                    }
+                },
+                new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error)
+                    {
+                        Log.i(TAG, "error with: " + error.getMessage());
+                        if (error.networkResponse != null)
+                            Log.i(TAG, "status code: " + error.networkResponse.statusCode);
+                    }
+                });
+
+        request.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        request.setTag("POST");
+        queue.add(request);
+    }
+
+    public void syncProfil(){
+
+        pseudo.setText(user.getuName());
+        name.setText(user.getFirstName()+" "+user.getLastName());
+        phone.setText(user.getPhone());
+        dci.setText(user.getDCI());
+        home.setText(user.getAddress()+" "+user.getZipCode()+" "+user.getCity());
+        email.setText(user.getEmail());
+
+        facebook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /*TODO
+                intent(myApplication.getFacebook()); */
+                intent(user.getFacebook());
+
+            }
+        });
+        twitter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /*TODO
+                intent(myApplication.getTwitter());*/
+                intent(user.getTwitter());
+            }
+        });
     }
 
     private void deconnectTask(){
@@ -369,6 +352,5 @@ public class Profil extends Fragment implements OnMapReadyCallback {
         request.setTag("POST");
         queue.add(request);
     }
-
 }
 

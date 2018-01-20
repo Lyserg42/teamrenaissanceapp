@@ -60,7 +60,7 @@ public class Login extends AppCompatActivity {
         checkIfConnected();
 
         loginView = (EditText) findViewById(R.id.login);
-        passwordView = (EditText) findViewById(R.id.password);
+        passwordView = (EditText) findViewById(R.id.newPassword);
         loginTest = (TextView) findViewById(R.id.loginTest);
         signInButton = (Button) findViewById(R.id.signInButton);
 
@@ -95,18 +95,20 @@ public class Login extends AppCompatActivity {
     }
 
     private void launchHomePage(){
-        List<HttpCookie> cookies = ((CookieManager)CookieHandler.getDefault()).getCookieStore().getCookies();
-
-        String[] cookieArray = new String[cookies.size()];
-        //copy your List of Strings into the Array
-        int i=0;
-        for(HttpCookie c : cookies ){
-            cookieArray[i]=c.toString();
-            i++;
-        }
-
+//        List<HttpCookie> cookies = ((CookieManager)CookieHandler.getDefault()).getCookieStore().getCookies();
+//
+//        String[] cookieArray = new String[cookies.size()];
+//        //copy your List of Strings into the Array
+//        int i=0;
+//        for(HttpCookie c : cookies ){
+//            cookieArray[i]=c.toString();
+//            Log.i(TAG,"Envoi cookie : "+c.toString());
+//            i++;
+//        }
+//
+//        Log.i(TAG,"Envoi cookie : "+cookieArray[0]);
+//        intent.putExtra("cookieArray",cookieArray);
         Intent intent = new Intent(getApplicationContext(), HomePage.class);
-        intent.putExtra("cookieArray",cookieArray);
         startActivity(intent);
     }
 
@@ -115,7 +117,9 @@ public class Login extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = "https://www.teamrenaissance.fr/user";
 
-        StringRequest request = new StringRequest(Request.Method.POST, url,
+        StringRequest request = new StringRequest(
+                Request.Method.POST,
+                url,
                 new Response.Listener<String>()
                 {
                     @Override
@@ -123,10 +127,7 @@ public class Login extends AppCompatActivity {
                     {
                         Log.i(TAG, "response: " + response);
                         if("".equals(response)){
-                            loginTest.setText("Connexion reussie");
-                             checkIfConnected();
-                            MyApplication profil = (MyApplication) getApplication();
-                            loginTest.setText(profil.getFirstName());
+                            checkIfConnected();
                             launchHomePage();
 
                         }
