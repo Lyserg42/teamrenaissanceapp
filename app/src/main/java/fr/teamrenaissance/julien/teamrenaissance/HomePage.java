@@ -41,6 +41,7 @@ public class HomePage extends AppCompatActivity {
 
         PersistentCookieStore cookieStore = new PersistentCookieStore(this);
 
+        //TODO
       /*  String[] cookieArray = getIntent().getStringArrayExtra("cookieArray");
         for(int i=0;i<cookieArray.length;i++)
         {
@@ -56,30 +57,6 @@ public class HomePage extends AppCompatActivity {
 
         getSupportActionBar().setDisplayShowTitleEnabled(false);
     }
-
-    // SHOW ITEM TO THE APP BAR
-    /*@Override
-    public boolean onCreateOptionsMenu(android.view.Menu menu)
-    {
-        getMenuInflater().inflate(R.menu.mainmenu, menu);
-        return true;
-    }*/
-
-    //handling click events
-   /* @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.logout:
-                Intent intent = new Intent();
-                intent.setClass(this,Login.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }*/
 
     //DOUBLE CLICK TO QUIT
     long SystemTime = 0;

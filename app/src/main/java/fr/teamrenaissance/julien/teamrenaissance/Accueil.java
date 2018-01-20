@@ -11,12 +11,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
@@ -29,7 +27,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.bumptech.glide.Glide;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,7 +41,6 @@ import fr.teamrenaissance.julien.teamrenaissance.beans.LoanBorrow;
 import fr.teamrenaissance.julien.teamrenaissance.beans.Tournament;
 import fr.teamrenaissance.julien.teamrenaissance.utils.DialogFragmentHelper;
 import fr.teamrenaissance.julien.teamrenaissance.utils.ImageAdapter;
-import fr.teamrenaissance.julien.teamrenaissance.utils.NumImageView;
 import fr.teamrenaissance.julien.teamrenaissance.utils.TournamentItem;
 
 public class Accueil extends Fragment {
@@ -162,7 +158,7 @@ public class Accueil extends Fragment {
                         card.setText(c.getQty() + " " + c.getcName());
                         dynamique_form.addView(card);
                     }
-                }else if(type == 1) {
+                }else if(type == 1) {//image
                     GridView gridView = new GridView(getContext());
                     gridView.setNumColumns(4);
                     GridView.LayoutParams glp = new GridView.LayoutParams(GridView.LayoutParams.MATCH_PARENT, GridView.LayoutParams.MATCH_PARENT);

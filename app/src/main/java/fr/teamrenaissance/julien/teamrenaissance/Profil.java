@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -30,6 +31,7 @@ import com.android.volley.toolbox.HttpClientStack;
 import com.android.volley.toolbox.HttpStack;
 import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -70,6 +72,7 @@ public class Profil extends Fragment implements OnMapReadyCallback {
     private ImageView facebook;
     private ImageView twitter;
     private ImageView edit;
+    private ImageView logout;
 
     private SupportMapFragment mapFragment;
     private GoogleMap mMap;
@@ -108,6 +111,7 @@ public class Profil extends Fragment implements OnMapReadyCallback {
         facebook = (ImageView) view.findViewById(R.id.fb);
         twitter = (ImageView) view.findViewById(R.id.tw);
         edit = (ImageView) view.findViewById(R.id.edit);
+        logout = (ImageView) view.findViewById(R.id.logout);
 
         getProfilTask();
 
@@ -159,6 +163,17 @@ public class Profil extends Fragment implements OnMapReadyCallback {
         address = myApplication.getAddress().split(" ");
         city = myApplication.getCity();
         zipcode = myApplication.getZipCode();*/
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deconnectTask();
+                Intent intent = new Intent();
+                intent.setClass(getContext(),Login.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+        });
+
 
         //google maps
         FragmentManager fm = getChildFragmentManager();
@@ -301,6 +316,58 @@ public class Profil extends Fragment implements OnMapReadyCallback {
         intent.addCategory(Intent.CATEGORY_BROWSABLE);
         intent.setData(Uri.parse(url));
         startActivity(intent);
+    }
+
+    private void deconnectTask(){
+
+        RequestQueue queue = Volley.newRequestQueue(getContext());
+        String url = "https://www.teamrenaissance.fr/user";
+
+        StringRequest request = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>()
+                {
+                    @Override
+                    public void onResponse(String response)
+                    {
+                        Log.i(TAG, "response: " + response);
+                    }
+                },
+                new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error)
+                    {
+                        Log.i(TAG, "error with: " + error.getMessage());
+                        if (error.networkResponse != null)
+                            Log.i(TAG, "status code: " + error.networkResponse.statusCode);
+                    }
+                })
+        {
+            @Override
+            public Map<String, String> getHeaders()  {
+                HashMap<String, String> header = new HashMap<String, String>();
+                header.put("Content-Type","application/json");
+                return header;
+            }
+
+            @Override
+            public byte[] getBody()
+            {
+                JSONObject body = new JSONObject();
+                try {
+                    body.put("typeRequest","deconnexion");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                return body.toString().getBytes();
+            }
+        };
+
+        request.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        request.setTag("POST");
+        queue.add(request);
     }
 
 }

@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout.LayoutParams;
@@ -46,7 +47,7 @@ import fr.teamrenaissance.julien.teamrenaissance.beans.Dialog;
 import fr.teamrenaissance.julien.teamrenaissance.beans.LoanBorrow;
 import fr.teamrenaissance.julien.teamrenaissance.beans.Tournament;
 import fr.teamrenaissance.julien.teamrenaissance.utils.DialogFragmentHelper;
-import fr.teamrenaissance.julien.teamrenaissance.utils.MyApplication;
+import fr.teamrenaissance.julien.teamrenaissance.utils.ImageAdapter;
 import fr.teamrenaissance.julien.teamrenaissance.utils.TournamentItem;
 
 
@@ -57,6 +58,8 @@ public class Mesprets extends Fragment {
     private String option = "jePrete";
     JSONObject result;
     List<Tournament> tournamentList = new ArrayList<>();
+    //TODO mettre en variable global pour l'application, les autres pages doient changer aussi
+    int type;
 
     public static Fragment newInstance(){
         Mesprets fragment = new Mesprets();
@@ -72,6 +75,24 @@ public class Mesprets extends Fragment {
     @Override
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        type =1;
+        final TextView textView = view.findViewById(R.id.type);
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO optimiser
+                if(type == 2){
+                    textView.setText("en texte");
+                    type = 1;
+                    addNewViews();
+                }else {
+                    type = 2;
+                    textView.setText("en image");
+                    addNewViews();
+                }
+            }
+        });
 
         //par defaut, view Tournois-drip down
         Spinner spinner = view.findViewById(R.id.spinner);
@@ -251,7 +272,7 @@ public class Mesprets extends Fragment {
 
         for(final Tournament tournament: tournaments){
             TextView tournamentName = new TextView(getContext());
-            LinearLayout.LayoutParams tnp = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+            LinearLayout.LayoutParams tnp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
             tnp.leftMargin = 50;
             tnp.topMargin = 30;
             tournamentName.setLayoutParams(tnp);
@@ -288,15 +309,26 @@ public class Mesprets extends Fragment {
                     });
                     dynamique_form.addView(userName);
 
-                    for (Card c : lb.getCards()) {
-                        TextView card = new TextView(getContext());
-                        LinearLayout.LayoutParams cp = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-                        cp.leftMargin = 50;
-                        card.setLayoutParams(cp);
+                    if(type == 2) {//text
+                        for (Card c : lb.getCards()) {
+                            TextView card = new TextView(getContext());
+                            LinearLayout.LayoutParams cp = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+                            cp.leftMargin = 50;
+                            card.setLayoutParams(cp);
 
-                        card.setText(c.getQty() + " " + c.getcName());
-                        dynamique_form.addView(card);
+                            card.setText(c.getQty() + " " + c.getcName());
+                            dynamique_form.addView(card);
+                        }
+                    }else if(type == 1) {//image
+                        GridView gridView = new GridView(getContext());
+                        gridView.setNumColumns(4);
+                        GridView.LayoutParams glp = new GridView.LayoutParams(GridView.LayoutParams.MATCH_PARENT, GridView.LayoutParams.MATCH_PARENT);
+                        gridView.setLayoutParams(glp);
+                        ImageAdapter imageAdapter = new ImageAdapter(getContext(), lb.getCards());
+                        gridView.setAdapter(imageAdapter);
+                        dynamique_form.addView(gridView);
                     }
+
                 }
             }else if("onMePrete".equals(option)){
                 for (final LoanBorrow lb : tournament.getBorrowedCards()) {
@@ -325,52 +357,70 @@ public class Mesprets extends Fragment {
                     });
                     dynamique_form.addView(userName);
 
-                    for (Card c : lb.getCards()) {
+                    if(type == 2) {//text
+                        for (Card c : lb.getCards()) {
+                            TextView card = new TextView(getContext());
+                            LinearLayout.LayoutParams cp = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+                            cp.leftMargin = 50;
+                            card.setLayoutParams(cp);
+
+                            card.setText(c.getQty() + " " + c.getcName());
+                            dynamique_form.addView(card);
+                        }
+                    }else if(type == 1) {//image
+                        GridView gridView = new GridView(getContext());
+                        gridView.setNumColumns(4);
+                        GridView.LayoutParams glp = new GridView.LayoutParams(GridView.LayoutParams.MATCH_PARENT, GridView.LayoutParams.MATCH_PARENT);
+                        gridView.setLayoutParams(glp);
+                        ImageAdapter imageAdapter = new ImageAdapter(getContext(), lb.getCards());
+                        gridView.setAdapter(imageAdapter);
+                        dynamique_form.addView(gridView);
+                    }
+                }
+            }else if("ilMeManque".equals(option)){
+                if(type == 2) {//text
+                    for (int i= 0; i< tournament.getDemands().size(); i++) {
                         TextView card = new TextView(getContext());
                         LinearLayout.LayoutParams cp = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
                         cp.leftMargin = 50;
                         card.setLayoutParams(cp);
 
-                        card.setText(c.getQty() + " " + c.getcName());
+                        card.setText(tournament.getDemands().get(i).getQty() + " " + tournament.getDemands().get(i).getcName());
+                        if(i== 0){
+                            card.setCompoundDrawables(null, null, drawable, null);//set drawableRight
+                            card.setCompoundDrawablePadding(15);
+                            card.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Dialog dialogContent = new Dialog();
+                                    dialogContent.settId(tournament.gettId());
+                                    //TODO MyApplication, ou rien
+                                    //dialogContent.setuId();
+                                    dialogContent.setType("demande");
+                                    dialogContent.setTitle("Modifier");
+                                    dialogContent.setCards(tournament.getDemands());
+
+                                    DialogFragment dialog = DialogFragmentHelper.newInstance(dialogContent);//將EditText值傳送給DialogFragment
+                                    dialog.show(getFragmentManager(),"dialog");//afficher dialog
+                                }
+                            });
+                        }
                         dynamique_form.addView(card);
                     }
-                }
-            }else if("ilMeManque".equals(option)){
-                for (int i= 0; i< tournament.getDemands().size(); i++) {
-                    TextView card = new TextView(getContext());
-                    LinearLayout.LayoutParams cp = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-                    cp.leftMargin = 50;
-                    card.setLayoutParams(cp);
-
-                    card.setText(tournament.getDemands().get(i).getQty() + " " + tournament.getDemands().get(i).getcName());
-                    if(i== 0){
-                        card.setCompoundDrawables(null, null, drawable, null);//set drawableRight
-                        card.setCompoundDrawablePadding(15);
-                        card.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Dialog dialogContent = new Dialog();
-                                dialogContent.settId(tournament.gettId());
-                                //TODO MyApplication, ou rien
-                                //dialogContent.setuId();
-                                dialogContent.setType("demande");
-                                dialogContent.setTitle("Modifier");
-                                dialogContent.setCards(tournament.getDemands());
-
-                                DialogFragment dialog = DialogFragmentHelper.newInstance(dialogContent);//將EditText值傳送給DialogFragment
-                                dialog.show(getFragmentManager(),"dialog");//afficher dialog
-                            }
-                        });
-                    }
-                    dynamique_form.addView(card);
+                }else if(type == 1) {//image
+                    GridView gridView = new GridView(getContext());
+                    gridView.setNumColumns(4);
+                    GridView.LayoutParams glp = new GridView.LayoutParams(GridView.LayoutParams.MATCH_PARENT, GridView.LayoutParams.MATCH_PARENT);
+                    gridView.setLayoutParams(glp);
+                    ImageAdapter imageAdapter = new ImageAdapter(getContext(), tournament.getDemands());
+                    gridView.setAdapter(imageAdapter);
+                    dynamique_form.addView(gridView);
                 }
             }
 
         }
 
     }
-
-
 
     private void parserResult(JSONObject result){
         tournamentList.clear();;

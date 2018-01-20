@@ -124,6 +124,15 @@
                 android:layout_height="wrap_content"
                 android:paddingBottom="9dp"/>
 
+            <ImageView
+                android:id="@+id/logout"
+                android:layout_below="@+id/email"
+                android:layout_toRightOf="@+id/tw"
+                android:src="@drawable/logout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="9dp"/>
+
             <fragment xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"
                 android:id="@+id/map"

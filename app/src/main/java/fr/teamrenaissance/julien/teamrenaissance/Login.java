@@ -122,14 +122,9 @@ public class Login extends AppCompatActivity {
                     public void onResponse(String response)
                     {
                         Log.i(TAG, "response: " + response);
-                        //TODO le serveur doit rendre quelque chose
                         if("".equals(response)){
                             loginTest.setText("Connexion reussie");
-                            //TODO: mettre des infos d'utilisateur dans le variable global
-                            //myApplication.setUserID("");...
-                            //TODO: redirect to ...
-                           //TODO Julien
-                            checkIfConnected();
+                             checkIfConnected();
                             MyApplication profil = (MyApplication) getApplication();
                             loginTest.setText(profil.getFirstName());
                             launchHomePage();

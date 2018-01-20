@@ -7,161 +7,76 @@
     android:orientation="vertical"
     tools:context="fr.teamrenaissance.julien.teamrenaissance.Mesprets">
 
-    <ScrollView
+    <TextView
+        android:id="@+id/type"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorPrimaryDark"
+        android:text="en text"
+        android:gravity="right"
+        android:paddingRight="15dp"/>
 
-    <LinearLayout
-        android:id="@+id/mesprets_form"
+    <Spinner
+        android:id="@+id/spinner"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="15dp">
+    </Spinner>
 
-        <Spinner
-            android:id="@+id/spinner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:maxLines="1"
-            android:layout_marginTop="15dp"
-            android:layout_marginLeft="15dp">
-        </Spinner>
+    <RadioGroup
+        android:id="@+id/radiogroup"
+        android:layout_below="@id/spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="15dp">
+        <RadioButton
+            android:id="@+id/jePrete"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Je prête"
+            android:textColor="@drawable/radiotext_selector"
+            android:gravity="center"
+            android:checked="true"
+            android:button="@null"
+            android:background="@null"/>
+        <RadioButton
+            android:id="@+id/onMePrete"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="On me prête"
+            android:textColor="@drawable/radiotext_selector"
+            android:gravity="center"
+            android:button="@null"
+            android:background="@null"
+            android:drawableLeft="@drawable/line"/>
+        <RadioButton
+            android:id="@+id/ilMeManque"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Il me manque"
+            android:textColor="@drawable/radiotext_selector"
+            android:gravity="center"
+            android:button="@null"
+            android:background="@null"
+            android:drawableLeft="@drawable/line"/>
+    </RadioGroup>
 
-        <RadioGroup
-            android:id="@+id/radiogroup"
-            android:layout_below="@id/spinner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="15dp"
-            android:layout_marginLeft="15dp">
-            <RadioButton
-                android:id="@+id/jePrete"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="Je prête"
-                android:textColor="@drawable/radiotext_selector"
-                android:gravity="center"
-                android:checked="true"
-                android:button="@null"
-                android:background="@null"/>
-            <RadioButton
-                android:id="@+id/onMePrete"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="On me prête"
-                android:textColor="@drawable/radiotext_selector"
-                android:gravity="center"
-                android:button="@null"
-                android:background="@null"
-                android:drawableLeft="@drawable/line"/>
-            <RadioButton
-                android:id="@+id/ilMeManque"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="Il me manque"
-                android:textColor="@drawable/radiotext_selector"
-                android:gravity="center"
-                android:button="@null"
-                android:background="@null"
-                android:drawableLeft="@drawable/line"/>
-        </RadioGroup>
-
+    <fr.teamrenaissance.julien.teamrenaissance.utils.BaseScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
         <LinearLayout
             android:id="@+id/dynamique_form"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:orientation="vertical">
         </LinearLayout>
 
-    </LinearLayout>
-    </ScrollView>
+    </fr.teamrenaissance.julien.teamrenaissance.utils.BaseScrollView>
 </LinearLayout>
-
-    <!-- Remarques:
-        -methode <<addView>> pour ajouter dynamiquement des views
-
-        todo:
-        implements LoaderCallbacks<Cursor> pour loader image
-
-
-    -->
-
-<!--
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:tools="http://schemas.android.com/tools"
-android:id="@+id/main"
-android:layout_width="fill_parent"
-android:layout_height="fill_parent"
-android:orientation="vertical"
-tools:context="fr.teamrenaissance.julien.teamrenaissance.Emprunter">
-
-<ScrollView
-    android:id="@+id/signUp_form"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <RelativeLayout
-        android:id="@+id/mesprets_form"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <Spinner
-            android:id="@+id/spinner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:maxLines="1"
-            android:layout_marginTop="15dp"
-            android:layout_marginLeft="15dp">
-        </Spinner>
-
-        <RadioGroup
-            android:id="@+id/radiogroup"
-            android:layout_below="@id/spinner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="15dp"
-            android:layout_marginLeft="15dp">
-            <RadioButton
-                android:id="@+id/jePrete"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="Je prête"
-                android:textColor="@drawable/radiotext_selector"
-                android:gravity="center"
-                android:checked="true"
-                android:button="@null"
-                android:background="@null"/>
-            <RadioButton
-                android:id="@+id/onMePrete"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="On me prête"
-                android:textColor="@drawable/radiotext_selector"
-                android:gravity="center"
-                android:button="@null"
-                android:background="@null"
-                android:drawableLeft="@drawable/line"/>
-            <RadioButton
-                android:id="@+id/ilMeManque"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="Il me manque"
-                android:textColor="@drawable/radiotext_selector"
-                android:gravity="center"
-                android:button="@null"
-                android:background="@null"
-                android:drawableLeft="@drawable/line"/>
-        </RadioGroup>
-
-    </RelativeLayout>
-</ScrollView>
-</RelativeLayout>
--->
