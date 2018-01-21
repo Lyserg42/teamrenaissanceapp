@@ -50,7 +50,6 @@ public class Accueil extends Fragment {
 
     private int tournamentId = -100;
     List<Tournament> tournamentList = new ArrayList<>();
-    JSONObject result;
     View globalView;
     //TODO mettre en variable global pour l'application, les autres pages doient changer aussi
     int type;
@@ -95,8 +94,7 @@ public class Accueil extends Fragment {
     }
 
     private void updateView(){
-        //parser le donnees et donner jsonArray au variable globale tournamentList
-        parserResult(result);
+
         //afficher les <<je prete>> de tous les tournois(id = -100) par defaut
         addNewViews();
 
@@ -215,7 +213,10 @@ public class Accueil extends Fragment {
     private void parserResult(JSONObject result){
         tournamentList.clear();
 
+
+
         try {
+
             JSONArray array = result.getJSONArray("tournaments");
 
             for(int i=0; i< array.length(); i++){
@@ -251,36 +252,43 @@ public class Accueil extends Fragment {
         }
     }
 
-    private void accueilTask(){
-        RequestQueue queue = Volley.newRequestQueue(getContext());
-        String url = "https://teamrenaissance.fr/loan?request=demandes";
 
-        final JsonObjectRequest request = new JsonObjectRequest(
-                Request.Method.GET,
-                url,
-                null,
-                new Response.Listener<JSONObject>() {
+    public void accueilTask(){
+        RequestQueue queue = Volley.newRequestQueue(getActivity().getApplicationContext());
+        String url = "https://www.teamrenaissance.fr/loan";
+        JSONObject dataJSON = new JSONObject();
+        try {
+            dataJSON.put("typeRequest","demandes");
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, dataJSON,
+                new Response.Listener<JSONObject>()
+                {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.i(TAG, "response: " + response.toString());
-                        result = response;
+                        Log.i(TAG,"Response getDemandes Accueil: "+response);
+                        parserResult(response);
                         updateView();
-
                     }
                 },
-                new Response.ErrorListener(){
+                new Response.ErrorListener()
+                {
                     @Override
-                    public void onErrorResponse(VolleyError error){
+                    public void onErrorResponse(VolleyError error)
+                    {
                         Log.i(TAG, "error with: " + error.getMessage());
                         if (error.networkResponse != null)
                             Log.i(TAG, "status code: " + error.networkResponse.statusCode);
                     }
-                }
-        );
+                });
 
         request.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        request.setTag("GET");
+        request.setTag("POST");
         queue.add(request);
     }
 }

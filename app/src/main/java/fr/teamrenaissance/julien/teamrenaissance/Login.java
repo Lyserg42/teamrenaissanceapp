@@ -192,8 +192,7 @@ public class Login extends AppCompatActivity {
     }
 
     public void checkIfConnected(){
-        boolean isConnected = false;
-        RequestQueue queue = Volley.newRequestQueue(this);
+        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
         String url = "https://www.teamrenaissance.fr/user";
         JSONObject dataJSON = new JSONObject();
         try {
@@ -205,17 +204,18 @@ public class Login extends AppCompatActivity {
         }
 
 
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, dataJSON,
-                new Response.Listener<JSONObject>()
-                {
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.POST,
+                url,
+                dataJSON,
+                new Response.Listener<JSONObject>(){
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.i(TAG,"Response getUser: "+response);
                         launchHomePage();
                     }
                 },
-                new Response.ErrorListener()
-                {
+                new Response.ErrorListener(){
                     @Override
                     public void onErrorResponse(VolleyError error)
                     {
@@ -223,7 +223,8 @@ public class Login extends AppCompatActivity {
                         if (error.networkResponse != null)
                             Log.i(TAG, "status code: " + error.networkResponse.statusCode);
                     }
-                });
+                }
+        );
 
         request.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));

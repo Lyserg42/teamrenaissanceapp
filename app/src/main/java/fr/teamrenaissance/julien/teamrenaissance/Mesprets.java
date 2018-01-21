@@ -77,6 +77,7 @@ public class Mesprets extends Fragment {
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
         type =1;
         final TextView textView = view.findViewById(R.id.type);
         textView.setOnClickListener(new View.OnClickListener() {
@@ -138,107 +139,10 @@ public class Mesprets extends Fragment {
             }
         });
 
+
         //TODO status code 401, comment traiter "session" ??
         // quand on charge cette page, d'abord recuperer les donnees depuis le serveur pour que apres l'on ajouter des views correspondantes en dynamique
         mesPretsTask();
-
-        /*-----------TODO tester, delete-----------------------*/
-        try {
-            String data = "{\n" +
-                    "\t\"tournaments\": [{\n" +
-                    "\t\t\"date\": \"2018-02-02\",\n" +
-                    "\t\t\"borrowedCards\": [{\n" +
-                    "\t\t\t\"uId\": 2,\n" +
-                    "\t\t\t\"cards\": [{\n" +
-                    "\t\t\t\t\"cName\": \"Black Lotus\",\n" +
-                    "\t\t\t\t\"qty\": 3,\n" +
-                    "\t\t\t\t\"cId\": 9299\n" +
-                    "\t\t\t}],\n" +
-                    "\t\t\t\"uName\": \"lijuan\"\n" +
-                    "\t\t}],\n" +
-                    "\t\t\"lentCards\": [],\n" +
-                    "\t\t\"tName\": \"PT Bilbao\",\n" +
-                    "\t\t\"tId\": 13,\n" +
-                    "\t\t\"demands\": [{\n" +
-                    "\t\t\t\"cName\": \"Black Lotus\",\n" +
-                    "\t\t\t\"qty\": 2,\n" +
-                    "\t\t\t\"cId\": 9299\n" +
-                    "\t\t}]\n" +
-                    "\t}, {\n" +
-                    "\t\t\"date\": \"2018-01-27\",\n" +
-                    "\t\t\"borrowedCards\": [{\n" +
-                    "\t\t\t\"uId\": 2,\n" +
-                    "\t\t\t\"cards\": [{\n" +
-                    "\t\t\t\t\"cName\": \"Porphyry Nodes\",\n" +
-                    "\t\t\t\t\"qty\": 1,\n" +
-                    "\t\t\t\t\"cId\": 21355\n" +
-                    "\t\t\t}],\n" +
-                    "\t\t\t\"uName\": \"lijuan\"\n" +
-                    "\t\t}],\n" +
-                    "\t\t\"lentCards\": [],\n" +
-                    "\t\t\"tName\": \"GP London\",\n" +
-                    "\t\t\"tId\": 12,\n" +
-                    "\t\t\"demands\": []\n" +
-                    "\t}, {\n" +
-                    "\t\t\"date\": \"2017-12-09\",\n" +
-                    "\t\t\"borrowedCards\": [{\n" +
-                    "\t\t\t\"uId\": 2,\n" +
-                    "\t\t\t\"cards\": [{\n" +
-                    "\t\t\t\t\"cName\": \"Tezzeret, Agent of Bolas\",\n" +
-                    "\t\t\t\t\"qty\": 1,\n" +
-                    "\t\t\t\t\"cId\": 15132\n" +
-                    "\t\t\t}],\n" +
-                    "\t\t\t\"uName\": \"lijuan\"\n" +
-                    "\t\t}],\n" +
-                    "\t\t\"lentCards\": [{\n" +
-                    "\t\t\t\"uId\": 3,\n" +
-                    "\t\t\t\"cards\": [{\n" +
-                    "\t\t\t\t\"cName\": \"Snapcaster Mage\",\n" +
-                    "\t\t\t\t\"qty\": 2,\n" +
-                    "\t\t\t\t\"cId\": 2343\n" +
-                    "\t\t\t}],\n" +
-                    "\t\t\t\"uName\": \"Balkany\"\n" +
-                    "\t\t}, {\n" +
-                    "\t\t\t\"uId\": 1,\n" +
-                    "\t\t\t\"cards\": [{\n" +
-                    "\t\t\t\t\"cName\": \"Mox Opal\",\n" +
-                    "\t\t\t\t\"qty\": 1,\n" +
-                    "\t\t\t\t\"cId\": 3792\n" +
-                    "\t\t\t}, {\n" +
-                    "\t\t\t\t\"cName\": \"Glimmervoid\",\n" +
-                    "\t\t\t\t\"qty\": 3,\n" +
-                    "\t\t\t\t\"cId\": 11664\n" +
-                    "\t\t\t}, {\n" +
-                    "\t\t\t\t\"cName\": \"Tezzeret, Agent of Bolas\",\n" +
-                    "\t\t\t\t\"qty\": 2,\n" +
-                    "\t\t\t\t\"cId\": 15132\n" +
-                    "\t\t\t}],\n" +
-                    "\t\t\t\"uName\": \"Lyserg\"\n" +
-                    "\t\t}],\n" +
-                    "\t\t\"tName\": \"GP Madrid\",\n" +
-                    "\t\t\"tId\": 11,\n" +
-                    "\t\t\"demands\": [{\n" +
-                    "\t\t\t\"cName\": \"Grafdigger's Cage\",\n" +
-                    "\t\t\t\"qty\": 1,\n" +
-                    "\t\t\t\"cId\": 2514\n" +
-                    "\t\t}, {\n" +
-                    "\t\t\t\"cName\": \"Mox Opal\",\n" +
-                    "\t\t\t\"qty\": 1,\n" +
-                    "\t\t\t\"cId\": 3792\n" +
-                    "\t\t}]\n" +
-                    "\t}]\n" +
-                    "}";
-
-            result = new JSONObject(data);
-        }catch (JSONException e){
-            e.printStackTrace();
-        }
-         /*---------------delete-------------------*/
-
-        //parser le donnees et donner jsonArray au variable globale tournamentList
-        parserResult(result);
-        //afficher les <<je prete>> de tous les tournois(id = -100) par defaut
-        addNewViews();
 
 
     }
@@ -493,41 +397,43 @@ public class Mesprets extends Fragment {
 
     }
 
-    private void mesPretsTask(){
-        RequestQueue queue = Volley.newRequestQueue(getContext());
-        String url = "https://teamrenaissance.fr/loan?request=mesprets";
 
-        final JsonObjectRequest request = new JsonObjectRequest(
-                Request.Method.GET,
-                url,
-                null,
-                new Response.Listener<JSONObject>() {
+    public void mesPretsTask(){
+        RequestQueue queue = Volley.newRequestQueue(getActivity().getApplicationContext());
+        String url = "https://www.teamrenaissance.fr/loan";
+        JSONObject dataJSON = new JSONObject();
+        try {
+            dataJSON.put("typeRequest","mesprets");
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, dataJSON,
+                new Response.Listener<JSONObject>()
+                {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.i(TAG, "response: " + response.toString());
-                        result = response;
+                        Log.i(TAG,"Response getMesPrest mesprets: "+response);
+                        parserResult(response);
+                        addNewViews();
                     }
                 },
-                new Response.ErrorListener(){
+                new Response.ErrorListener()
+                {
                     @Override
-                    public void onErrorResponse(VolleyError error){
+                    public void onErrorResponse(VolleyError error)
+                    {
                         Log.i(TAG, "error with: " + error.getMessage());
                         if (error.networkResponse != null)
                             Log.i(TAG, "status code: " + error.networkResponse.statusCode);
                     }
-                }
-        ){
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> headers = new HashMap<>();
-                headers.put("Cookie",((CookieManager) CookieHandler.getDefault()).getCookieStore().getCookies().toString());
-                return headers;
-            }
-        };
+                });
 
         request.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        request.setTag("GET");
+        request.setTag("POST");
         queue.add(request);
     }
 
