@@ -42,6 +42,7 @@ import fr.teamrenaissance.julien.teamrenaissance.beans.LoanBorrow;
 import fr.teamrenaissance.julien.teamrenaissance.beans.Tournament;
 import fr.teamrenaissance.julien.teamrenaissance.utils.DialogFragmentHelper;
 import fr.teamrenaissance.julien.teamrenaissance.utils.ImageAdapter;
+import fr.teamrenaissance.julien.teamrenaissance.utils.NoScrollGridView;
 import fr.teamrenaissance.julien.teamrenaissance.utils.TournamentItem;
 
 public class Accueil extends Fragment {
@@ -160,7 +161,8 @@ public class Accueil extends Fragment {
                         dynamique_form.addView(card);
                     }
                 }else if(type == 1) {//image
-                    GridView gridView = new GridView(getContext());
+                    //GridView gridView = new GridView(getContext());
+                    NoScrollGridView gridView = new NoScrollGridView(getContext());
                     gridView.setNumColumns(4);
                     GridView.LayoutParams glp = new GridView.LayoutParams(GridView.LayoutParams.MATCH_PARENT, GridView.LayoutParams.MATCH_PARENT);
                     gridView.setLayoutParams(glp);
