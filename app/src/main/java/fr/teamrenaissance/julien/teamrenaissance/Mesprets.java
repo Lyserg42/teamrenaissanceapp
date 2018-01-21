@@ -1,6 +1,7 @@
 package fr.teamrenaissance.julien.teamrenaissance;
 
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
@@ -290,7 +291,9 @@ public class Mesprets extends Fragment {
                     userName.setLayoutParams(unp);
 
                     userName.setText(lb.getuName());
-                    userName.setTextColor(Color.parseColor("#c8e8ff"));
+                    userName.setTextColor(Color.parseColor("#000000"));
+                    userName.setTextSize(17);
+                    userName.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
                     userName.setCompoundDrawables(null, null, drawable, null);//set drawableRight
                     userName.setCompoundDrawablePadding(15);
                     userName.setOnClickListener(new View.OnClickListener() {
@@ -338,7 +341,9 @@ public class Mesprets extends Fragment {
                     userName.setLayoutParams(unp);
 
                     userName.setText(lb.getuName());
-                    userName.setTextColor(Color.parseColor("#c8e8ff"));
+                    userName.setTextColor(Color.parseColor("#000000"));
+                    userName.setTextSize(17);
+                    userName.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
                     userName.setCompoundDrawables(null, null, drawable, null);//set drawableRight
                     userName.setCompoundDrawablePadding(15);
                     userName.setOnClickListener(new View.OnClickListener() {

@@ -1,6 +1,7 @@
 package fr.teamrenaissance.julien.teamrenaissance;
 
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -144,7 +145,9 @@ public class Accueil extends Fragment {
                 unp.leftMargin = 50;
                 userName.setLayoutParams(unp);
                 userName.setText(lb.getuName());
-                userName.setTextColor(Color.parseColor("#c8e8ff"));
+                userName.setTextColor(Color.parseColor("#000000"));
+                userName.setTextSize(17);
+                userName.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
                 dynamique_form.addView(userName);
 
                 if(type == 2) {//text

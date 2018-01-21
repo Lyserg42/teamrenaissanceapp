@@ -48,7 +48,7 @@ public class NumImageView extends AppCompatImageView {
             paint.setStyle(Paint.Style.FILL);
             canvas.drawCircle(getWidth() - radius - paddingRight/2, radius + paddingTop/2, radius, paint);
             //white
-            paint.setColor(0xffffffff);
+            paint.setColor(Color.BLACK);
             paint.setTextSize(textSize);
             canvas.drawText("" + (num < 99 ? num : 99),
                     num < 10 ? getWidth() - radius - textSize / 4 - paddingRight/2
