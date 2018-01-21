@@ -128,10 +128,10 @@ public class Profil extends Fragment implements OnMapReadyCallback {
             @Override
             public void onClick(View v) {
                 deconnectTask();
-                Intent intent = new Intent();
+               /* Intent intent = new Intent();
                 intent.setClass(getContext(),Login.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
+                startActivity(intent); */
             }
         });
 
@@ -311,16 +311,20 @@ public class Profil extends Fragment implements OnMapReadyCallback {
 
     private void deconnectTask(){
 
-        RequestQueue queue = Volley.newRequestQueue(getContext());
+        RequestQueue queue = Volley.newRequestQueue(getActivity().getApplicationContext());
         String url = "https://www.teamrenaissance.fr/user";
 
-        StringRequest request = new StringRequest(Request.Method.POST, url,
+        StringRequest request = new StringRequest(
+                Request.Method.POST,
+                url,
                 new Response.Listener<String>()
                 {
                     @Override
-                    public void onResponse(String response)
-                    {
-                        Log.i(TAG, "response: " + response);
+                    public void onResponse(String response) {
+                        Log.i(TAG,"Deconnexion reussie");
+                        Intent intent = new Intent(getActivity().getApplicationContext(), Login.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
                     }
                 },
                 new Response.ErrorListener()
@@ -328,7 +332,7 @@ public class Profil extends Fragment implements OnMapReadyCallback {
                     @Override
                     public void onErrorResponse(VolleyError error)
                     {
-                        Log.i(TAG, "error with: " + error.getMessage());
+                        Log.i(TAG, "error with Deconnexion: " + error.getMessage());
                         if (error.networkResponse != null)
                             Log.i(TAG, "status code: " + error.networkResponse.statusCode);
                     }
@@ -347,6 +351,7 @@ public class Profil extends Fragment implements OnMapReadyCallback {
                 JSONObject body = new JSONObject();
                 try {
                     body.put("typeRequest","deconnexion");
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -359,6 +364,55 @@ public class Profil extends Fragment implements OnMapReadyCallback {
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         request.setTag("POST");
         queue.add(request);
+
+//        RequestQueue queue = Volley.newRequestQueue(getContext());
+//        String url = "https://www.teamrenaissance.fr/user";
+//
+//        StringRequest request = new StringRequest(Request.Method.POST, url,
+//                new Response.Listener<String>()
+//                {
+//                    @Override
+//                    public void onResponse(String response)
+//                    {
+//                        Log.i(TAG, "response: " + response);
+//                    }
+//                },
+//                new Response.ErrorListener()
+//                {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error)
+//                    {
+//                        Log.i(TAG, "error with: " + error.getMessage());
+//                        if (error.networkResponse != null)
+//                            Log.i(TAG, "status code: " + error.networkResponse.statusCode);
+//                    }
+//                })
+//        {
+//            @Override
+//            public Map<String, String> getHeaders()  {
+//                HashMap<String, String> header = new HashMap<String, String>();
+//                header.put("Content-Type","application/json");
+//                return header;
+//            }
+//
+//            @Override
+//            public byte[] getBody()
+//            {
+//                JSONObject body = new JSONObject();
+//                try {
+//                    body.put("typeRequest","deconnexion");
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//
+//                return body.toString().getBytes();
+//            }
+//        };
+//
+//        request.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+//                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+//        request.setTag("POST");
+//        queue.add(request);
     }
 }
 
