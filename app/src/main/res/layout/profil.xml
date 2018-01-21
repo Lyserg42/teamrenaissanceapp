@@ -30,12 +30,11 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <fr.teamrenaissance.julien.teamrenaissance.utils.CircleImageView
+            <ImageView
                 android:layout_marginTop="5dp"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_centerHorizontal="true"
-                lynn:radius="50dp"
                 android:id="@+id/avatar"/>
 
             <TextView

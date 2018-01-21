@@ -49,6 +49,7 @@ import fr.teamrenaissance.julien.teamrenaissance.beans.LoanBorrow;
 import fr.teamrenaissance.julien.teamrenaissance.beans.Tournament;
 import fr.teamrenaissance.julien.teamrenaissance.utils.DialogFragmentHelper;
 import fr.teamrenaissance.julien.teamrenaissance.utils.ImageAdapter;
+import fr.teamrenaissance.julien.teamrenaissance.utils.NoScrollGridView;
 import fr.teamrenaissance.julien.teamrenaissance.utils.TournamentItem;
 
 
@@ -139,12 +140,7 @@ public class Mesprets extends Fragment {
             }
         });
 
-
-        //TODO status code 401, comment traiter "session" ??
-        // quand on charge cette page, d'abord recuperer les donnees depuis le serveur pour que apres l'on ajouter des views correspondantes en dynamique
         mesPretsTask();
-
-
     }
 
     @Override
@@ -227,7 +223,7 @@ public class Mesprets extends Fragment {
                             dynamique_form.addView(card);
                         }
                     }else if(type == 1) {//image
-                        GridView gridView = new GridView(getContext());
+                        NoScrollGridView gridView = new NoScrollGridView(getContext());
                         gridView.setNumColumns(4);
                         GridView.LayoutParams glp = new GridView.LayoutParams(GridView.LayoutParams.MATCH_PARENT, GridView.LayoutParams.MATCH_PARENT);
                         gridView.setLayoutParams(glp);
@@ -332,7 +328,7 @@ public class Mesprets extends Fragment {
     }
 
     private void parserResult(JSONObject result){
-        tournamentList.clear();;
+        tournamentList.clear();
 
         try {
             JSONArray array = result.getJSONArray("tournaments");
@@ -354,6 +350,7 @@ public class Mesprets extends Fragment {
                         c1.setcId((array.getJSONObject(i).getJSONArray("borrowedCards").getJSONObject(b).getJSONArray("cards")).getJSONObject(bc).getInt("cId"));
                         c1.setcName((array.getJSONObject(i).getJSONArray("borrowedCards").getJSONObject(b).getJSONArray("cards")).getJSONObject(bc).getString("cName"));
                         c1.setQty((array.getJSONObject(i).getJSONArray("borrowedCards").getJSONObject(b).getJSONArray("cards")).getJSONObject(bc).getInt("qty"));
+                        c1.setImg((array.getJSONObject(i).getJSONArray("borrowedCards").getJSONObject(b).getJSONArray("cards")).getJSONObject(bc).getString("img"));
                         borrowedCards.add(c1);
                     }
                     borrowed.setCards(borrowedCards);
@@ -372,6 +369,7 @@ public class Mesprets extends Fragment {
                         c2.setcId((array.getJSONObject(i).getJSONArray("lentCards").getJSONObject(l).getJSONArray("cards")).getJSONObject(lc).getInt("cId"));
                         c2.setcName((array.getJSONObject(i).getJSONArray("lentCards").getJSONObject(l).getJSONArray("cards")).getJSONObject(lc).getString("cName"));
                         c2.setQty((array.getJSONObject(i).getJSONArray("lentCards").getJSONObject(l).getJSONArray("cards")).getJSONObject(lc).getInt("qty"));
+                        c2.setImg((array.getJSONObject(i).getJSONArray("lentCards").getJSONObject(l).getJSONArray("cards")).getJSONObject(lc).getString("img"));
                         lentCards.add(c2);
                     }
                     lent.setCards(lentCards);
@@ -385,6 +383,7 @@ public class Mesprets extends Fragment {
                     c3.setcId((array.getJSONObject(i).getJSONArray("demands")).getJSONObject(d).getInt("cId"));
                     c3.setcName((array.getJSONObject(i).getJSONArray("demands")).getJSONObject(d).getString("cName"));
                     c3.setQty((array.getJSONObject(i).getJSONArray("demands")).getJSONObject(d).getInt("qty"));
+                    c3.setImg((array.getJSONObject(i).getJSONArray("demands")).getJSONObject(d).getString("img"));
                     demandsCard.add(c3);
                 }
                 tournament.setDemands(demandsCard);

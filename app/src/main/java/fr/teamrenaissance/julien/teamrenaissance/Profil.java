@@ -4,13 +4,15 @@ import android.Manifest;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +29,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -44,14 +49,13 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import fr.teamrenaissance.julien.teamrenaissance.beans.User;
-import fr.teamrenaissance.julien.teamrenaissance.utils.CircleImageView;
 import fr.teamrenaissance.julien.teamrenaissance.utils.GetLatLongByURL;
 
 public class Profil extends Fragment implements OnMapReadyCallback {
 
     public static final String TAG = "Profil";
 
-    private CircleImageView avatar;
+    private ImageView avatar;
     private TextView pseudo;
     private TextView name;
     private TextView phone;
@@ -92,7 +96,7 @@ public class Profil extends Fragment implements OnMapReadyCallback {
 
         getProfilTask();
 
-        avatar = (CircleImageView) view.findViewById(R.id.avatar);
+        avatar = (ImageView) view.findViewById(R.id.avatar);
         pseudo = (TextView) view.findViewById(R.id.pseudo);
         name = (TextView) view.findViewById(R.id.name);
         phone = (TextView) view.findViewById(R.id.phone);
@@ -104,17 +108,10 @@ public class Profil extends Fragment implements OnMapReadyCallback {
         edit = (ImageView) view.findViewById(R.id.edit);
         logout = (ImageView) view.findViewById(R.id.logout);
 
-        if(null == user.getAvatar() || "".equals(user.getAvatar()) || getResources().getIdentifier(user.getAvatar(), "drawable", getContext().getPackageName())==0) {
-            avatar.setImageResource(R.drawable.avatar_defaut);
-        }else {
-            int id = getResources().getIdentifier(user.getAvatar(), "drawable", getContext().getPackageName());
-            avatar.setImageResource(id);
-        }
-
-        if(null != user.getAddress())
-        address = user.getAddress().split(" ");
+        /*if(null != user.getAddress())
+            address = user.getAddress().split(" ");
         city = user.getCity();
-        zipcode = user.getZipCode();
+        zipcode = user.getZipCode();*/
 
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,10 +132,10 @@ public class Profil extends Fragment implements OnMapReadyCallback {
             }
         });
 
-        //google maps
+        /*//google maps
         FragmentManager fm = getChildFragmentManager();
         mapFragment = (SupportMapFragment) fm.findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+        mapFragment.getMapAsync(this);*/
 
     }
 
@@ -299,13 +296,40 @@ public class Profil extends Fragment implements OnMapReadyCallback {
                 intent(user.getFacebook());
             }
         });
-
         twitter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 intent(user.getTwitter());
             }
         });
+
+        if(null == user.getAvatar() || "".equals(user.getAvatar())) {
+            avatar.setImageResource(R.drawable.avatar_defaut);
+        }else {
+            Glide.with(getContext())
+                    .load(user.getAvatar())
+                    .asBitmap()
+                    .centerCrop()
+                    .into(new BitmapImageViewTarget(avatar) {
+                        @Override
+                        protected void setResource(Bitmap resource) {
+                            RoundedBitmapDrawable circularBitmapDrawable =
+                                    RoundedBitmapDrawableFactory.create(getResources(), resource);
+                            circularBitmapDrawable.setCircular(true);
+                            avatar.setImageDrawable(circularBitmapDrawable);
+                        }
+                    });
+        }
+
+        if(null != user.getAddress())
+            address = user.getAddress().split(" ");
+        city = user.getCity();
+        zipcode = user.getZipCode();
+
+        //google maps
+        FragmentManager fm = getChildFragmentManager();
+        mapFragment = (SupportMapFragment) fm.findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
 
     }
 

@@ -95,8 +95,6 @@ public class Accueil extends Fragment {
     }
 
     private void updateView(){
-
-        //afficher les <<je prete>> de tous les tournois(id = -100) par defaut
         addNewViews();
 
         Spinner spinner = globalView.findViewById(R.id.spinner);
