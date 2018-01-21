@@ -1,6 +1,7 @@
 package fr.teamrenaissance.julien.teamrenaissance;
 
 import android.Manifest;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -88,6 +90,8 @@ public class Profil extends Fragment implements OnMapReadyCallback {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        getProfilTask();
+
         avatar = (CircleImageView) view.findViewById(R.id.avatar);
         pseudo = (TextView) view.findViewById(R.id.pseudo);
         name = (TextView) view.findViewById(R.id.name);
@@ -100,14 +104,17 @@ public class Profil extends Fragment implements OnMapReadyCallback {
         edit = (ImageView) view.findViewById(R.id.edit);
         logout = (ImageView) view.findViewById(R.id.logout);
 
-        getProfilTask();
+        if(null == user.getAvatar() || "".equals(user.getAvatar()) || getResources().getIdentifier(user.getAvatar(), "drawable", getContext().getPackageName())==0) {
+            avatar.setImageResource(R.drawable.avatar_defaut);
+        }else {
+            int id = getResources().getIdentifier(user.getAvatar(), "drawable", getContext().getPackageName());
+            avatar.setImageResource(id);
+        }
 
-        /*TODO
-        int id = getResources().getIdentifier("lyserg", "drawable", getContext().getPackageName());
-        int id = getResources().getIdentifier(myApplication.getAvatar(), "drawable", getContext().getPackageName());
-        avatar.setImageResource(id);*/
-        avatar.setImageResource(R.drawable.lyserg);
-
+        if(null != user.getAddress())
+        address = user.getAddress().split(" ");
+        city = user.getCity();
+        zipcode = user.getZipCode();
 
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,10 +123,7 @@ public class Profil extends Fragment implements OnMapReadyCallback {
                 startActivity(intent);
             }
         });
-        /* TODO
-        address = myApplication.getAddress().split(" ");
-        city = myApplication.getCity();
-        zipcode = myApplication.getZipCode();*/
+
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -130,7 +134,6 @@ public class Profil extends Fragment implements OnMapReadyCallback {
                 startActivity(intent);
             }
         });
-
 
         //google maps
         FragmentManager fm = getChildFragmentManager();
@@ -165,17 +168,15 @@ public class Profil extends Fragment implements OnMapReadyCallback {
             uiSettings.setMyLocationButtonEnabled(true);
         }
 
-        /* TODO
         String url = "https://maps.googleapis.com/maps/api/geocode/json?address=";
         for(String s : address){
             url += s + "+";
         }
-        url += zipcode + "+"+ zipcode+ "&key="+ apiKey_geocoder;*/
+        url += zipcode + "+"+ city+ "&key="+ apiKey_geocoder;
         //String url= "https://maps.googleapis.com/maps/api/geocode/json?address=102+北京市朝阳区望京南湖东园+100102+北京&key=AIzaSyBQd1pLp088PuXWMFpITv-p7rYWvr4XUXU";
-        String url = "https://maps.googleapis.com/maps/api/geocode/json?address=39+Avenue+du+Président+Wilson+94230+Cachan&key=AIzaSyBQd1pLp088PuXWMFpITv-p7rYWvr4XUXU";
+        //String url = "https://maps.googleapis.com/maps/api/geocode/json?address=39+Avenue+du+Président+Wilson+94230+Cachan&key=AIzaSyBQd1pLp088PuXWMFpITv-p7rYWvr4XUXU";
 
         try {
-            //TODO optimise
             String[] response= new GetLatLongByURL().execute(url).get();
 
             JSONObject jsonObject = new JSONObject(response[0]);
@@ -211,7 +212,15 @@ public class Profil extends Fragment implements OnMapReadyCallback {
         intent.setAction(Intent.ACTION_VIEW);
         intent.addCategory(Intent.CATEGORY_BROWSABLE);
         intent.setData(Uri.parse(url));
-        startActivity(intent);
+        try {
+            startActivity(intent);
+        } catch (ActivityNotFoundException e) {
+            if("".equals(url) || null == url){
+                Toast.makeText(getContext(), "The account does not exist", Toast.LENGTH_SHORT).show();
+            }else {
+                Toast.makeText(getContext(), url+ " is currently invalid", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     public void parserResponse(JSONObject result){
@@ -275,32 +284,29 @@ public class Profil extends Fragment implements OnMapReadyCallback {
         queue.add(request);
     }
 
-    public void syncProfil(){
+    public void syncProfil() {
 
         pseudo.setText(user.getuName());
-        name.setText(user.getFirstName()+" "+user.getLastName());
+        name.setText(user.getFirstName() + " " + user.getLastName());
         phone.setText(user.getPhone());
         dci.setText(user.getDCI());
-        home.setText(user.getAddress()+" "+user.getZipCode()+" "+user.getCity());
+        home.setText(user.getAddress() + " " + user.getZipCode() + " " + user.getCity());
         email.setText(user.getEmail());
 
         facebook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*TODO
-                intent(myApplication.getFacebook()); */
                 intent(user.getFacebook());
-
             }
         });
+
         twitter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*TODO
-                intent(myApplication.getTwitter());*/
                 intent(user.getTwitter());
             }
         });
+
     }
 
     private void deconnectTask(){

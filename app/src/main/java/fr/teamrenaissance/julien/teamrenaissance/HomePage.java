@@ -100,7 +100,6 @@ public class HomePage extends AppCompatActivity {
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                Log.i(TAG,"onTabSelected:"+tab.getText());
             }
 
             @Override
@@ -130,7 +129,6 @@ public class HomePage extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
-                Log.i(TAG,"select page:"+position);
             }
 
             @Override
