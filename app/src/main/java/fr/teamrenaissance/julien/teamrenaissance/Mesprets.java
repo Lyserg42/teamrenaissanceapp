@@ -206,7 +206,7 @@ public class Mesprets extends Fragment {
                             Dialog dialogContent = new Dialog();
                             dialogContent.settId(tournament.gettId());
                             dialogContent.setuId(lb.getuId());
-                            dialogContent.setType("pret");
+                            dialogContent.setType("modifier");
                             dialogContent.setTitle("Modifier");
                             dialogContent.setCards(lb.getCards());
 

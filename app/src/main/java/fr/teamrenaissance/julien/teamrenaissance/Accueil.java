@@ -79,12 +79,12 @@ public class Accueil extends Fragment {
             public void onClick(View v) {
                 //TODO optimiser
                 if(type == 2){
-                    textView.setText("en texte");
+                    textView.setText("Texte");
                     type = 1;
                     accueilTask();
                 }else {
                     type = 2;
-                    textView.setText("en image");
+                    textView.setText("Images");
                     accueilTask();
                 }
             }
@@ -183,7 +183,7 @@ public class Accueil extends Fragment {
                         dialogContent.settId(tournament.gettId());
                         dialogContent.setuId(lb.getuId());
                         dialogContent.setType("preter");
-                        dialogContent.setTitle("Prêt à "+lb.getuName()+ "pour le "+tournament.gettName());
+                        dialogContent.setTitle("Prêt à "+lb.getuName()+ " pour le "+tournament.gettName());
                         dialogContent.setCards(lb.getCards());
 
                         DialogFragment dialog = DialogFragmentHelper.newInstance(dialogContent);

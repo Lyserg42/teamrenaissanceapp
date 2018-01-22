@@ -14,7 +14,9 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -141,7 +143,7 @@ public class Emprunter extends Fragment {
                 if (cancel) {
                     focusView.requestFocus();
                 } else {
-                    valideTask();
+                    nouvelleDemandeTask(getJsonPret());
                 }
             }
         });
@@ -152,62 +154,110 @@ public class Emprunter extends Fragment {
         super.onDestroyView();
     }
 
-    //TODO status code: 401
-    private void valideTask(){
 
-            RequestQueue queue = Volley.newRequestQueue(getContext());
-            String url = "https://teamrenaissance.fr/loan";
+    private JSONObject getJsonPret(){
+        JSONObject dataJSON = new JSONObject();
+        JSONArray cards = new JSONArray();
+        try {
+            dataJSON.put("tId", tournamentId);
 
-            JSONObject dataJSON = new JSONObject();
-            JSONArray cards = new JSONArray();
-            try {
-                dataJSON.put("tId", tournamentId);
+            cardNames = textArea.getText().toString();
+            String[] cartes= cardNames.split("\n|\r");
+            for(String carte: cartes){
+                //numeros d'extrait
+                String regEx="[^0-9]";
+                Pattern p = Pattern.compile(regEx);
+                Matcher m = p.matcher(carte);
 
-                cardNames = textArea.getText().toString();
-                String[] cartes= cardNames.split("\n|\r");
-                for(String carte: cartes){
-                    //numeros d'extrait
-                    String regEx="[^0-9]";
-                    Pattern p = Pattern.compile(regEx);
-                    Matcher m = p.matcher(carte);
+                //remplacer les numeros par des espaces, et supprimer les espaces de debut et de fin
+                carte = carte.replaceAll("([1-9]+[0-9]*|0)(\\.[\\d]+)?", "").trim();
 
-                    //remplacer les numeros par des espaces, et supprimer les espaces de debut et de fin
-                    carte = carte.replaceAll("([1-9]+[0-9]*|0)(\\.[\\d]+)?", "").trim();
-
-                    JSONObject card = new JSONObject();
-                    card.put("qty",  Integer.valueOf(m.replaceAll("").trim()));
-                    card.put("cName", carte);
-                    cards.put(card);
-                }
-
-                dataJSON.put("cards", cards);
-            } catch (JSONException e) {
-                e.printStackTrace();
+                JSONObject card = new JSONObject();
+                card.put("qty",  Integer.valueOf(m.replaceAll("").trim()));
+                card.put("cName", carte);
+                cards.put(card);
             }
-            System.out.println("--------------------dataJSON="+ dataJSON.toString());
 
-            JsonObjectRequest request = new JsonObjectRequest(
-                    Request.Method.POST,
-                    url,
-                    dataJSON,
-                    new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            Log.i(TAG, "response: " + response.toString());
-                        }
-                    },
-                    new Response.ErrorListener(){
-                        @Override
-                        public void onErrorResponse(VolleyError error){
-                            Log.i(TAG, "error with: " + error.getMessage());
-                            if (error.networkResponse != null)
-                                Log.i(TAG, "status code: " + error.networkResponse.statusCode);
-                        }
+            dataJSON.put("cards", cards);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return dataJSON;
+    }
+
+    //TODO status code: 401
+//    private void valideTask(){
+//
+//            RequestQueue queue = Volley.newRequestQueue(getContext());
+//            String url = "https://teamrenaissance.fr/loan";
+//
+//
+//
+//            System.out.println("--------------------dataJSON="+ dataJSON.toString());
+//
+//            JsonObjectRequest request = new JsonObjectRequest(
+//                    Request.Method.POST,
+//                    url,
+//                    dataJSON,
+//                    new Response.Listener<JSONObject>() {
+//                        @Override
+//                        public void onResponse(JSONObject response) {
+//                            Log.i(TAG, "response: " + response.toString());
+//                        }
+//                    },
+//                    new Response.ErrorListener(){
+//                        @Override
+//                        public void onErrorResponse(VolleyError error){
+//                            Log.i(TAG, "error with: " + error.getMessage());
+//                            if (error.networkResponse != null)
+//                                Log.i(TAG, "status code: " + error.networkResponse.statusCode);
+//                        }
+//                    }
+//            );
+//
+//            queue.add(request);
+//
+//    }
+
+    public void nouvelleDemandeTask(JSONObject dataJSON){
+        RequestQueue queue = Volley.newRequestQueue(getActivity().getApplicationContext());
+        String url = "https://www.teamrenaissance.fr/loan";
+        try {
+            dataJSON.put("typeRequest","nouvelleDemande");
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, dataJSON,
+                new Response.Listener<JSONObject>()
+                {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.i(TAG,"Response gnouvelleDemandes Accueil: "+response);
+                        Toast.makeText(getActivity(), "Emprunt enregistré.", Toast.LENGTH_SHORT).show();
+
                     }
-            );
+                },
+                new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error)
+                    {
+                        Toast.makeText(getActivity(), "Erreur. Demande invalide.", Toast.LENGTH_SHORT).show();
+                        Log.i(TAG, "error with nouvelleDemande: " + error.getMessage());
+                        if (error.networkResponse != null)
+                            Log.i(TAG, "status code: " + error.networkResponse.statusCode);
+                    }
+                });
 
-            queue.add(request);
-
+        request.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        request.setTag("POST");
+        queue.add(request);
     }
 
 }

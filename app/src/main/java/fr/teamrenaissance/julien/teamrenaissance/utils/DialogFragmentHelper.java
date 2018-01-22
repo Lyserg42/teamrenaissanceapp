@@ -1,5 +1,6 @@
 package fr.teamrenaissance.julien.teamrenaissance.utils;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
@@ -18,11 +19,13 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
@@ -31,8 +34,11 @@ import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import fr.teamrenaissance.julien.teamrenaissance.Login;
 import fr.teamrenaissance.julien.teamrenaissance.R;
 import fr.teamrenaissance.julien.teamrenaissance.beans.Card;
 import fr.teamrenaissance.julien.teamrenaissance.beans.Dialog;
@@ -142,7 +148,7 @@ public class DialogFragmentHelper extends DialogFragment{
 
                     //TODO status code: 401
                     //envoyer une requete <<put>> au serveur
-                    modifyTask(dialog);
+                    sendRequest(dialog.getType(),getDialogJSON(dialog));
 
                     //TODO apres fermer dialog, verifier est-ce que les chiffres sur la page <<MES PRETES>> est synchronize ou pas
                     //fermer dialog
@@ -154,13 +160,7 @@ public class DialogFragmentHelper extends DialogFragment{
         return view;
     }
 
-    private void modifyTask(Dialog dialog){
-
-        RequestQueue queue = Volley.newRequestQueue(getContext());
-        //pour la page MES PRETS, Modifier
-        String url_mesprets = "https://teamrenaissance.fr/loan?request=modifier";
-        //pour la page ACCUEIL, Preter
-        String url_accueil = "https://teamrenaissance.fr/loan?request=preter";
+    private JSONObject getDialogJSON(Dialog dialog){
 
         JSONObject dataJSON = new JSONObject();
         JSONArray cards = new JSONArray();
@@ -187,28 +187,56 @@ public class DialogFragmentHelper extends DialogFragment{
         }
         System.out.println("--------------------dataJSON="+ dataJSON.toString());
 
-        JsonObjectRequest request = new JsonObjectRequest(
-                Request.Method.POST,
-                ("preter".equals(dialog.getType()))? url_accueil: url_mesprets,
-                dataJSON,
-                new Response.Listener<JSONObject>() {
+        return dataJSON;
+
+    }
+
+    public void sendRequest(final String typeRequest, final JSONObject dataJSON){
+        RequestQueue queue = Volley.newRequestQueue(getActivity().getApplicationContext());
+        String url = "https://www.teamrenaissance.fr/user?typeRequest="+typeRequest;
+
+        StringRequest request = new StringRequest(
+                Request.Method.PUT,
+                url,
+                new Response.Listener<String>()
+                {
                     @Override
-                    public void onResponse(JSONObject response) {
-                        Log.i(TAG, "response: " + response.toString());
+                    public void onResponse(String response) {
+                        Log.i(TAG,typeRequest+" reussi");
+                        Intent intent = new Intent(getActivity().getApplicationContext(), Login.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
                     }
                 },
-                new Response.ErrorListener(){
+                new Response.ErrorListener()
+                {
                     @Override
-                    public void onErrorResponse(VolleyError error){
-                        Log.i(TAG, "error with: " + error.getMessage());
+                    public void onErrorResponse(VolleyError error)
+                    {
+                        Log.i(TAG, "error with "+typeRequest+": " + error.getMessage());
                         if (error.networkResponse != null)
                             Log.i(TAG, "status code: " + error.networkResponse.statusCode);
                     }
-                }
-        );
+                })
+        {
+            @Override
+            public Map<String, String> getHeaders()  {
+                HashMap<String, String> header = new HashMap<String, String>();
+                header.put("Content-Type","application/json");
+                return header;
+            }
 
+            @Override
+            public byte[] getBody()
+            {
+                return dataJSON.toString().getBytes();
+            }
+        };
+
+        request.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        request.setTag("PUT");
         queue.add(request);
-
     }
 
 }
