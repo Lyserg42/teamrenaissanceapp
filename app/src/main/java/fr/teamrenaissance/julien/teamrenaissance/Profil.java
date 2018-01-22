@@ -108,11 +108,6 @@ public class Profil extends Fragment implements OnMapReadyCallback {
         edit = (ImageView) view.findViewById(R.id.edit);
         logout = (ImageView) view.findViewById(R.id.logout);
 
-        /*if(null != user.getAddress())
-            address = user.getAddress().split(" ");
-        city = user.getCity();
-        zipcode = user.getZipCode();*/
-
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -125,18 +120,8 @@ public class Profil extends Fragment implements OnMapReadyCallback {
             @Override
             public void onClick(View v) {
                 deconnectTask();
-               /* Intent intent = new Intent();
-                intent.setClass(getContext(),Login.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent); */
             }
         });
-
-        /*//google maps
-        FragmentManager fm = getChildFragmentManager();
-        mapFragment = (SupportMapFragment) fm.findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);*/
-
     }
 
 
@@ -389,54 +374,6 @@ public class Profil extends Fragment implements OnMapReadyCallback {
         request.setTag("POST");
         queue.add(request);
 
-//        RequestQueue queue = Volley.newRequestQueue(getContext());
-//        String url = "https://www.teamrenaissance.fr/user";
-//
-//        StringRequest request = new StringRequest(Request.Method.POST, url,
-//                new Response.Listener<String>()
-//                {
-//                    @Override
-//                    public void onResponse(String response)
-//                    {
-//                        Log.i(TAG, "response: " + response);
-//                    }
-//                },
-//                new Response.ErrorListener()
-//                {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error)
-//                    {
-//                        Log.i(TAG, "error with: " + error.getMessage());
-//                        if (error.networkResponse != null)
-//                            Log.i(TAG, "status code: " + error.networkResponse.statusCode);
-//                    }
-//                })
-//        {
-//            @Override
-//            public Map<String, String> getHeaders()  {
-//                HashMap<String, String> header = new HashMap<String, String>();
-//                header.put("Content-Type","application/json");
-//                return header;
-//            }
-//
-//            @Override
-//            public byte[] getBody()
-//            {
-//                JSONObject body = new JSONObject();
-//                try {
-//                    body.put("typeRequest","deconnexion");
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//
-//                return body.toString().getBytes();
-//            }
-//        };
-//
-//        request.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-//                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-//        request.setTag("POST");
-//        queue.add(request);
     }
 }
 

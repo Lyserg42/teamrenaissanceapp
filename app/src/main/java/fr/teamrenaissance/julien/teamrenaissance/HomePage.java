@@ -70,6 +70,15 @@ public class HomePage extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
     }
 
+    @Override
+    protected void onResume() {
+        int id = getIntent().getIntExtra("userloginflag", 0);
+        if (id == 4) {
+            viewPager.setCurrentItem(4);
+        }
+        super.onResume();
+    }
+
     //DOUBLE CLICK TO QUIT
     long SystemTime = 0;
     @Override

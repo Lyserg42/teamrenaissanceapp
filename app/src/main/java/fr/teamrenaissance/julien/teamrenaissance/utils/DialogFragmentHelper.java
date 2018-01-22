@@ -116,6 +116,7 @@ public class DialogFragmentHelper extends DialogFragment{
             @Override
             public void onClick(View view) {
                 dismiss();//fermer Dialog
+
             }
         } );
         btn_confirm.setOnClickListener(new View.OnClickListener(){
@@ -173,16 +174,10 @@ public class DialogFragmentHelper extends DialogFragment{
     @Override
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
-        System.out.println("-----------dismiss%"+  getParentFragment());
         if (onDismissListener != null) {
             onDismissListener.onDismiss(dialog);
         }
-        //Fragment parentFragment = getParentFragment();
-        //System.out.println("---------pp="+parentFragment);
-        /*if (parentFragment instanceof DialogInterface.OnDismissListener) {
-            System.out.println("---------ss=");
-            ((DialogInterface.OnDismissListener) parentFragment).onDismiss(dialog);
-        }*/
+
     }
 
     private JSONObject getDialogJSON(Dialog dialog){

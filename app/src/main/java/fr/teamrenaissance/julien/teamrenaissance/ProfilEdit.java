@@ -217,8 +217,8 @@ public class ProfilEdit extends AppCompatActivity {
                         public void onResponse(String response) {
                             Log.i(TAG, "response: " + response);
                             Intent intent = new Intent(getApplicationContext(), HomePage.class);
+                            intent.putExtra("userloginflag", 4);
                             startActivity(intent);
-
                         }
                     },
                     new Response.ErrorListener(){
