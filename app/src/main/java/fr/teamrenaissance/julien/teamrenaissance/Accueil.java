@@ -180,7 +180,7 @@ public class Accueil extends Fragment {
                         Dialog dialogContent = new Dialog();
                         dialogContent.settId(tournament.gettId());
                         dialogContent.setuId(lb.getuId());
-                        dialogContent.setType("preter");
+                        dialogContent.setType("nouveauPret");
                         dialogContent.setTitle("Prêt à "+lb.getuName()+ " pour le "+tournament.gettName());
                         dialogContent.setCards(lb.getCards());
 

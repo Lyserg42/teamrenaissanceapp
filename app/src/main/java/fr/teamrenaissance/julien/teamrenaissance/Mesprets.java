@@ -86,12 +86,12 @@ public class Mesprets extends Fragment {
             public void onClick(View v) {
                 //TODO optimiser
                 if(type == 2){
-                    textView.setText("en texte");
+                    textView.setText("Texte");
                     type = 1;
                     addNewViews();
                 }else {
                     type = 2;
-                    textView.setText("en image");
+                    textView.setText("Images");
                     addNewViews();
                 }
             }
@@ -202,7 +202,7 @@ public class Mesprets extends Fragment {
                             Dialog dialogContent = new Dialog();
                             dialogContent.settId(tournament.gettId());
                             dialogContent.setuId(lb.getuId());
-                            dialogContent.setType("modifier");
+                            dialogContent.setType("pret");
                             dialogContent.setTitle("Modifier");
                             dialogContent.setCards(lb.getCards());
 

@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -146,13 +147,13 @@ public class DialogFragmentHelper extends DialogFragment{
                     }
                     dialog.setCards(card_newQty);
 
-                    //TODO status code: 401
-                    //envoyer une requete <<put>> au serveur
-                    sendRequest(dialog.getType(),getDialogJSON(dialog));
+                    String param="modifier";
+                    if(dialog.getType().equals("nouveauPret")){
+                        param = "preter";
+                    }
+                    sendRequest(param,getDialogJSON(dialog));
 
-                    //TODO apres fermer dialog, verifier est-ce que les chiffres sur la page <<MES PRETES>> est synchronize ou pas
-                    //fermer dialog
-                    dismiss();
+
                 }
             }
         } );
@@ -169,7 +170,7 @@ public class DialogFragmentHelper extends DialogFragment{
             if(!"demande".equals(dialog.getType())){
                 dataJSON.put("uId", dialog.getuId());
             }
-            if(!"preter".equals(dialog.getType())) {
+            if(!"nouveauPret".equals(dialog.getType())) {
                 dataJSON.put("type", dialog.getType());
             }
 
@@ -193,7 +194,7 @@ public class DialogFragmentHelper extends DialogFragment{
 
     public void sendRequest(final String typeRequest, final JSONObject dataJSON){
         RequestQueue queue = Volley.newRequestQueue(getActivity().getApplicationContext());
-        String url = "https://www.teamrenaissance.fr/user?typeRequest="+typeRequest;
+        String url = "https://www.teamrenaissance.fr/loan?request="+typeRequest;
 
         StringRequest request = new StringRequest(
                 Request.Method.PUT,
@@ -203,9 +204,8 @@ public class DialogFragmentHelper extends DialogFragment{
                     @Override
                     public void onResponse(String response) {
                         Log.i(TAG,typeRequest+" reussi");
-                        Intent intent = new Intent(getActivity().getApplicationContext(), Login.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(intent);
+                        Toast.makeText(getActivity(), "Modification enregistrée.", Toast.LENGTH_SHORT).show();
+                        dismiss();
                     }
                 },
                 new Response.ErrorListener()
