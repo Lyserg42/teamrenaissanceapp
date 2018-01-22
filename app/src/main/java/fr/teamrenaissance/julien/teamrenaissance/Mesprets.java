@@ -8,6 +8,7 @@ import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout.LayoutParams;
@@ -29,6 +31,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -229,6 +232,24 @@ public class Mesprets extends Fragment {
                         gridView.setLayoutParams(glp);
                         ImageAdapter imageAdapter = new ImageAdapter(getContext(), lb.getCards());
                         gridView.setAdapter(imageAdapter);
+                        //show large image
+                        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                LayoutInflater inflater = LayoutInflater.from(getContext());
+                                View imgEntryView = inflater.inflate(R.layout.maxpicture, null);
+                                final AlertDialog dialog = new AlertDialog.Builder(getContext()).create();
+                                ImageView img = imgEntryView.findViewById(R.id.large_image);
+                                Glide.with(getContext()).load(lb.getCards().get(position).getImg()).asBitmap().into(img);
+                                dialog.setView(imgEntryView); // 自定义dialog
+                                dialog.show();
+                                imgEntryView.setOnClickListener(new View.OnClickListener() {
+                                    public void onClick(View paramView) {
+                                        dialog.cancel();
+                                    }
+                                });
+                            }
+                        });
                         dynamique_form.addView(gridView);
                     }
 
@@ -279,6 +300,24 @@ public class Mesprets extends Fragment {
                         gridView.setLayoutParams(glp);
                         ImageAdapter imageAdapter = new ImageAdapter(getContext(), lb.getCards());
                         gridView.setAdapter(imageAdapter);
+                        //show large image
+                        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                LayoutInflater inflater = LayoutInflater.from(getContext());
+                                View imgEntryView = inflater.inflate(R.layout.maxpicture, null);
+                                final AlertDialog dialog = new AlertDialog.Builder(getContext()).create();
+                                ImageView img = imgEntryView.findViewById(R.id.large_image);
+                                Glide.with(getContext()).load(lb.getCards().get(position).getImg()).asBitmap().into(img);
+                                dialog.setView(imgEntryView); // 自定义dialog
+                                dialog.show();
+                                imgEntryView.setOnClickListener(new View.OnClickListener() {
+                                    public void onClick(View paramView) {
+                                        dialog.cancel();
+                                    }
+                                });
+                            }
+                        });
                         dynamique_form.addView(gridView);
                     }
                 }
@@ -319,6 +358,24 @@ public class Mesprets extends Fragment {
                     gridView.setLayoutParams(glp);
                     ImageAdapter imageAdapter = new ImageAdapter(getContext(), tournament.getDemands());
                     gridView.setAdapter(imageAdapter);
+                    //show large image
+                    gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            LayoutInflater inflater = LayoutInflater.from(getContext());
+                            View imgEntryView = inflater.inflate(R.layout.maxpicture, null);
+                            final AlertDialog dialog = new AlertDialog.Builder(getContext()).create();
+                            ImageView img = imgEntryView.findViewById(R.id.large_image);
+                            Glide.with(getContext()).load(tournament.getDemands().get(position).getImg()).asBitmap().into(img);
+                            dialog.setView(imgEntryView); // 自定义dialog
+                            dialog.show();
+                            imgEntryView.setOnClickListener(new View.OnClickListener() {
+                                public void onClick(View paramView) {
+                                    dialog.cancel();
+                                }
+                            });
+                        }
+                    });
                     dynamique_form.addView(gridView);
                 }
             }
