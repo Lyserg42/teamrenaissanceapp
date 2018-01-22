@@ -1,5 +1,6 @@
 package fr.teamrenaissance.julien.teamrenaissance;
 
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
@@ -49,14 +50,13 @@ import fr.teamrenaissance.julien.teamrenaissance.utils.ImageAdapter;
 import fr.teamrenaissance.julien.teamrenaissance.utils.NoScrollGridView;
 import fr.teamrenaissance.julien.teamrenaissance.utils.TournamentItem;
 
-public class Accueil extends Fragment {
+public class Accueil extends Fragment{
 
     public static final String TAG = "Accueil";
 
     private int tournamentId = -100;
     List<Tournament> tournamentList = new ArrayList<>();
     View globalView;
-    //TODO mettre en variable global pour l'application, les autres pages doient changer aussi
     int type;
 
     public static Fragment newInstance(){
@@ -192,7 +192,7 @@ public class Accueil extends Fragment {
                 }
 
                 Button button = new Button(getContext());
-                LinearLayout.LayoutParams bp = new LinearLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                LinearLayout.LayoutParams bp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 bp.leftMargin = 50;
                 button.setLayoutParams(bp);
                 button.setText("Prêter des cartes");
@@ -208,8 +208,18 @@ public class Accueil extends Fragment {
 
                         DialogFragment dialog = DialogFragmentHelper.newInstance(dialogContent);
                         dialog.show(getFragmentManager(),"dialog");
+
+                        //
+                        getFragmentManager().executePendingTransactions();
+                        dialog.getDialog().setOnDismissListener(new DialogInterface.OnDismissListener() {
+                            @Override
+                            public void onDismiss(DialogInterface dialog) {
+                                accueilTask();
+                            }
+                        });
                     }
                 });
+
                 dynamique_form.addView(button);
             }
         }
@@ -313,4 +323,11 @@ public class Accueil extends Fragment {
         request.setTag("POST");
         queue.add(request);
     }
+
+ /*   @Override
+    public void onDismiss(DialogInterface dialog) {
+
+        System.out.println("------------------parent");
+
+    }*/
 }

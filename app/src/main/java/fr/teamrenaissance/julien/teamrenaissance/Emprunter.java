@@ -33,6 +33,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import fr.teamrenaissance.julien.teamrenaissance.utils.LoginOcclusionProblem.InputManagerHelper;
+import fr.teamrenaissance.julien.teamrenaissance.utils.LoginOcclusionProblem.KeyboardListenLayout;
 import fr.teamrenaissance.julien.teamrenaissance.utils.TournamentItem;
 
 public class Emprunter extends Fragment {
@@ -147,6 +149,10 @@ public class Emprunter extends Fragment {
                 }
             }
         });
+
+        /*Resoudre le probleme d'occlusion des editText de "singIn"*/
+        KeyboardListenLayout keyboardListenLayout = (KeyboardListenLayout)view.findViewById(R.id.layout_keyboard);
+        InputManagerHelper.attachToActivity(getActivity()).bind(keyboardListenLayout, valideButton).offset(16);
     }
 
     @Override
@@ -187,40 +193,6 @@ public class Emprunter extends Fragment {
         return dataJSON;
     }
 
-    //TODO status code: 401
-//    private void valideTask(){
-//
-//            RequestQueue queue = Volley.newRequestQueue(getContext());
-//            String url = "https://teamrenaissance.fr/loan";
-//
-//
-//
-//            System.out.println("--------------------dataJSON="+ dataJSON.toString());
-//
-//            JsonObjectRequest request = new JsonObjectRequest(
-//                    Request.Method.POST,
-//                    url,
-//                    dataJSON,
-//                    new Response.Listener<JSONObject>() {
-//                        @Override
-//                        public void onResponse(JSONObject response) {
-//                            Log.i(TAG, "response: " + response.toString());
-//                        }
-//                    },
-//                    new Response.ErrorListener(){
-//                        @Override
-//                        public void onErrorResponse(VolleyError error){
-//                            Log.i(TAG, "error with: " + error.getMessage());
-//                            if (error.networkResponse != null)
-//                                Log.i(TAG, "status code: " + error.networkResponse.statusCode);
-//                        }
-//                    }
-//            );
-//
-//            queue.add(request);
-//
-//    }
-
     public void nouvelleDemandeTask(JSONObject dataJSON){
         RequestQueue queue = Volley.newRequestQueue(getActivity().getApplicationContext());
         String url = "https://www.teamrenaissance.fr/loan";
@@ -238,6 +210,7 @@ public class Emprunter extends Fragment {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.i(TAG,"Response gnouvelleDemandes Accueil: "+response);
+                        textArea.setText("");
                         Toast.makeText(getActivity(), "Emprunt enregistré.", Toast.LENGTH_SHORT).show();
 
                     }

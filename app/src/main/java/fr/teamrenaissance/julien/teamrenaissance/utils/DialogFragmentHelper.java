@@ -1,9 +1,11 @@
 package fr.teamrenaissance.julien.teamrenaissance.utils;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -46,6 +48,7 @@ import fr.teamrenaissance.julien.teamrenaissance.beans.Dialog;
 
 public class DialogFragmentHelper extends DialogFragment{
     public static final String TAG = "Dialog";
+    private DialogInterface.OnDismissListener onDismissListener;
 
     public static DialogFragmentHelper newInstance(Dialog dialogContent){
         DialogFragmentHelper f = new DialogFragmentHelper();
@@ -159,6 +162,27 @@ public class DialogFragmentHelper extends DialogFragment{
         } );
 
         return view;
+    }
+
+
+    // add a listener and override the onDismiss
+    public void setOnDismissListener(DialogInterface.OnDismissListener onDismissListener) {
+        this.onDismissListener = onDismissListener;
+    }
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        super.onDismiss(dialog);
+        System.out.println("-----------dismiss%"+  getParentFragment());
+        if (onDismissListener != null) {
+            onDismissListener.onDismiss(dialog);
+        }
+        //Fragment parentFragment = getParentFragment();
+        //System.out.println("---------pp="+parentFragment);
+        /*if (parentFragment instanceof DialogInterface.OnDismissListener) {
+            System.out.println("---------ss=");
+            ((DialogInterface.OnDismissListener) parentFragment).onDismiss(dialog);
+        }*/
     }
 
     private JSONObject getDialogJSON(Dialog dialog){

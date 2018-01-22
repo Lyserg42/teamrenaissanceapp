@@ -1,5 +1,6 @@
 package fr.teamrenaissance.julien.teamrenaissance;
 
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -23,7 +25,6 @@ import android.widget.RelativeLayout.LayoutParams;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -37,12 +38,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.CookieHandler;
-import java.net.CookieManager;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import android.support.v4.app.DialogFragment;
 
@@ -61,9 +58,7 @@ public class Mesprets extends Fragment {
 
     private int tournamentId = -100;
     private String option = "jePrete";
-    JSONObject result;
     List<Tournament> tournamentList = new ArrayList<>();
-    //TODO mettre en variable global pour l'application, les autres pages doient changer aussi
     int type;
 
     public static Fragment newInstance(){
@@ -125,15 +120,15 @@ public class Mesprets extends Fragment {
                 switch (checkedId){
                     case R.id.jePrete:
                         option = "jePrete";
-                        addNewViews();//lentCards
+                        mesPretsTask(); //lentCards
                         break;
                     case R.id.onMePrete:
                         option = "onMePrete";
-                        addNewViews();//borrowedCards
+                        mesPretsTask();//borrowedCards
                         break;
                     case R.id.ilMeManque:
                         option = "ilMeManque";
-                        addNewViews();//demandes
+                        mesPretsTask();//demandes
                         break;
                     default:
                         Log.d(TAG,"How to monitor????");
@@ -209,8 +204,15 @@ public class Mesprets extends Fragment {
                             dialogContent.setTitle("Modifier");
                             dialogContent.setCards(lb.getCards());
 
-                            DialogFragment dialog = DialogFragmentHelper.newInstance(dialogContent);//將EditText值傳送給DialogFragment
-                            dialog.show(getFragmentManager(),"dialog");//afficher dialog
+                            DialogFragment dialog = DialogFragmentHelper.newInstance(dialogContent);
+                            dialog.show(getFragmentManager(),"dialog");
+                            getFragmentManager().executePendingTransactions();
+                            dialog.getDialog().setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                @Override
+                                public void onDismiss(DialogInterface dialog) {
+                                    mesPretsTask();
+                                }
+                            });
                         }
                     });
                     dynamique_form.addView(userName);
@@ -241,7 +243,7 @@ public class Mesprets extends Fragment {
                                 final AlertDialog dialog = new AlertDialog.Builder(getContext()).create();
                                 ImageView img = imgEntryView.findViewById(R.id.large_image);
                                 Glide.with(getContext()).load(lb.getCards().get(position).getImg()).asBitmap().into(img);
-                                dialog.setView(imgEntryView); // 自定义dialog
+                                dialog.setView(imgEntryView);
                                 dialog.show();
                                 imgEntryView.setOnClickListener(new View.OnClickListener() {
                                     public void onClick(View paramView) {
@@ -277,8 +279,15 @@ public class Mesprets extends Fragment {
                             dialogContent.setTitle("Modifier");
                             dialogContent.setCards(lb.getCards());
 
-                            DialogFragment dialog = DialogFragmentHelper.newInstance(dialogContent);//將EditText值傳送給DialogFragment
-                            dialog.show(getFragmentManager(),"dialog");//afficher dialog
+                            DialogFragment dialog = DialogFragmentHelper.newInstance(dialogContent);
+                            dialog.show(getFragmentManager(),"dialog");
+                            getFragmentManager().executePendingTransactions();
+                            dialog.getDialog().setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                @Override
+                                public void onDismiss(DialogInterface dialog) {
+                                    mesPretsTask();
+                                }
+                            });
                         }
                     });
                     dynamique_form.addView(userName);
@@ -338,14 +347,20 @@ public class Mesprets extends Fragment {
                                 public void onClick(View v) {
                                     Dialog dialogContent = new Dialog();
                                     dialogContent.settId(tournament.gettId());
-                                    //TODO MyApplication, ou rien
-                                    //dialogContent.setuId();
                                     dialogContent.setType("demande");
                                     dialogContent.setTitle("Modifier");
                                     dialogContent.setCards(tournament.getDemands());
 
-                                    DialogFragment dialog = DialogFragmentHelper.newInstance(dialogContent);//將EditText值傳送給DialogFragment
-                                    dialog.show(getFragmentManager(),"dialog");//afficher dialog
+                                    DialogFragment dialog = DialogFragmentHelper.newInstance(dialogContent);
+                                    dialog.show(getFragmentManager(),"dialog");
+
+                                    getFragmentManager().executePendingTransactions();
+                                    dialog.getDialog().setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                        @Override
+                                        public void onDismiss(DialogInterface dialog) {
+                                            mesPretsTask();
+                                        }
+                                    });
                                 }
                             });
                         }
@@ -367,7 +382,7 @@ public class Mesprets extends Fragment {
                             final AlertDialog dialog = new AlertDialog.Builder(getContext()).create();
                             ImageView img = imgEntryView.findViewById(R.id.large_image);
                             Glide.with(getContext()).load(tournament.getDemands().get(position).getImg()).asBitmap().into(img);
-                            dialog.setView(imgEntryView); // 自定义dialog
+                            dialog.setView(imgEntryView);
                             dialog.show();
                             imgEntryView.setOnClickListener(new View.OnClickListener() {
                                 public void onClick(View paramView) {
@@ -377,6 +392,37 @@ public class Mesprets extends Fragment {
                         }
                     });
                     dynamique_form.addView(gridView);
+
+                    if(tournament.getDemands().size() > 0) {
+                        Button button = new Button(getContext());
+                        LinearLayout.LayoutParams bp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                        bp.leftMargin = 50;
+                        button.setLayoutParams(bp);
+                        button.setText("Modifier");
+                        button.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Dialog dialogContent = new Dialog();
+                                dialogContent.settId(tournament.gettId());
+                                dialogContent.setType("demande");
+                                dialogContent.setTitle("Modifier");
+                                dialogContent.setCards(tournament.getDemands());
+
+                                DialogFragment dialog = DialogFragmentHelper.newInstance(dialogContent);
+                                dialog.show(getFragmentManager(), "dialog");
+
+                                getFragmentManager().executePendingTransactions();
+                                dialog.getDialog().setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                    @Override
+                                    public void onDismiss(DialogInterface dialog) {
+                                        mesPretsTask();
+                                    }
+                                });
+                            }
+                        });
+
+                        dynamique_form.addView(button);
+                    }
                 }
             }
 
